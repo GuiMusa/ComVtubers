@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('mail')->unique();
             $table->string('mdp');
             $table->enum('statue', ['actif', 'inactif', 'banni', 'modérateur'])->default('actif');
-            $table->foreignId('ID_article')->nullable()->constrained('articles')->onDelete('set null');
+            $table->foreignId('ID_article')->nullable();
             $table->timestamps();
         });
     }
