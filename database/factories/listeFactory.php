@@ -22,7 +22,7 @@ class ListeFactory extends Factory
         return [
             'date' => $this->faker->dateTimeBetween('-3 months', 'now'),
             'favoris' => $this->faker->boolean(40),
-            'ID_article' => \App\Models\Article::factory(),
+            'ID_article' => \App\Models\Article::inRandomOrder()->first()?->id ?? \App\Models\Article::factory(),
         ];
     }
 }

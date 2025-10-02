@@ -24,9 +24,9 @@ class ArticleFactory extends Factory
         return [
             'date' => $this->faker->dateTimeBetween('-6 months', 'now'),
             'titre' => $this->faker->randomElement($vTuberTopics),
-            'statue' => $this->faker->randomElement(['actif', 'brouillon', 'archivé']),
+            'statue' => $this->faker->randomElement(['brouillon', 'publié', 'archivé']),
             'favoris' => $this->faker->boolean(30),
-            'ID_message' => null, // À définir selon vos relations
+            'ID_commentaire' => null, // À définir selon vos relations
         ];
     }
 }

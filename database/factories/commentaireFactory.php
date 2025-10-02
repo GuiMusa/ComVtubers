@@ -25,8 +25,8 @@ class CommentaireFactory extends Factory
             'date' => $this->faker->dateTimeBetween('-1 month', 'now'),
             'contenu' => $this->faker->randomElement($vTuberComments) . ' ' . $this->faker->sentence(),
             'image' => $this->faker->optional(0.3)->imageUrl(300, 200, 'anime', true),
-            'ID_utilisateur' => \App\Models\Utilisateur::factory(),
-            'ID_mention' => $this->faker->optional(0.2)->randomElement(\App\Models\Mention::pluck('ID')->toArray()),
+            'ID_utilisateur' => \App\Models\Utilisateur::inRandomOrder()->first()?->id ?? \App\Models\Utilisateur::factory(),
+            'ID_mention' => $this->faker->optional(0.2)->boolean() ? \App\Models\Mention::inRandomOrder()->first()?->id : null,
         ];
     }
 }
