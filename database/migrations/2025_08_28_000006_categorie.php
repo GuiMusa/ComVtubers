@@ -8,17 +8,18 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('listes', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date');
-            $table->boolean('favoris')->default(false);
-            $table->foreignId('ID_article')->constrained('articles')->onDelete('cascade');
+            $table->string('nom');
+            $table->foreignId('carte_id')->constrained('cartes')->onDelete('cascade');
+            $table->foreignId('article_id')->constrained('articles')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('listes');
+        Schema::dropIfExists('categories');
     }
 };

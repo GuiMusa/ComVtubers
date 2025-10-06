@@ -26,7 +26,8 @@ class Article extends Model
         'titre',
         'statue',
         'favoris',
-        'ID_commentaire',
+        'utilisateur_id',
+        'liste_id',
     ];
 
     /**
@@ -40,20 +41,34 @@ class Article extends Model
     ];
 
     /**
-     * Obtenir le commentaire auquel l'article est associé.
-     * Note : Cette relation (un article appartient à un commentaire) est inhabituelle.
+     * Obtenir l'utilisateur qui a créé l'article.
      */
-    public function commentaire()
+    public function utilisateur()
     {
-        return $this->belongsTo(Commentaire::class, 'ID_commentaire');
+        return $this->belongsTo(Utilisateur::class, 'utilisateur_id');
     }
 
     /**
-     * Obtenir les utilisateurs pour cet article.
-     * Note : Cette relation (un article a plusieurs utilisateurs) est inhabituelle.
+     * Obtenir la liste à laquelle l'article appartient.
      */
-    public function utilisateurs()
+    public function liste()
     {
-        return $this->hasMany(Utilisateur::class, 'ID_article');
+        return $this->belongsTo(Liste::class, 'liste_id');
+    }
+
+    /**
+     * Obtenir les commentaires de l'article.
+     */
+    public function commentaires()
+    {
+        return $this->hasMany(Commentaire::class, 'article_id');
+    }
+
+    /**
+     * Obtenir les catégories associées à l'article.
+     */
+    public function categories()
+    {
+        return $this->hasMany(Categorie::class, 'article_id');
     }
 }

@@ -8,19 +8,16 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('articles', function (Blueprint $table) {
+        Schema::create('listes', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date');
-            $table->string('titre');
-            $table->enum('statue', ['brouillon', 'publié', 'archivé'])->default('brouillon');
             $table->boolean('favoris')->default(false);
-            $table->foreignId('ID_commentaire')->nullable()->constrained('commentaires')->onDelete('set null');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('articles');
+        Schema::dropIfExists('listes');
     }
 };

@@ -30,7 +30,6 @@ class Utilisateur extends Authenticatable
         'mail',
         'mdp',
         'statue',
-        'ID_article',
     ];
 
     /**
@@ -57,15 +56,14 @@ class Utilisateur extends Authenticatable
      */
     public function commentaires()
     {
-        return $this->hasMany(Commentaire::class, 'ID_utilisateur');
+        return $this->hasMany(Commentaire::class, 'utilisateur_id');
     }
 
     /**
-     * Obtenir l'article auquel l'utilisateur est associé.
-     * Note : Cette relation (un utilisateur appartient à un article) est inhabituelle.
+     * Obtenir les articles créés par l'utilisateur.
      */
-    public function article()
+    public function articles()
     {
-        return $this->belongsTo(Article::class, 'ID_article');
+        return $this->hasMany(Article::class, 'utilisateur_id');
     }
 }

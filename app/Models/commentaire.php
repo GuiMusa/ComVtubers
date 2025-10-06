@@ -25,8 +25,8 @@ class Commentaire extends Model
         'date',
         'contenu',
         'image',
-        'ID_utilisateur',
-        'ID_mention',
+        'utilisateur_id',
+        'article_id',
     ];
 
     /**
@@ -43,23 +43,22 @@ class Commentaire extends Model
      */
     public function utilisateur()
     {
-        return $this->belongsTo(Utilisateur::class, 'ID_utilisateur');
+        return $this->belongsTo(Utilisateur::class, 'utilisateur_id');
     }
 
     /**
-     * Obtenir la mention associée au commentaire.
+     * Obtenir l'article auquel le commentaire est associé.
      */
-    public function mention()
+    public function article()
     {
-        return $this->belongsTo(Mention::class, 'ID_mention');
+        return $this->belongsTo(Article::class, 'article_id');
     }
 
     /**
-     * Obtenir les articles pour ce commentaire.
-     * Note : Cette relation (un commentaire a plusieurs articles) est inhabituelle.
+     * Obtenir les mentions pour ce commentaire.
      */
-    public function articles()
+    public function mentions()
     {
-        return $this->hasMany(Article::class, 'ID_commentaire');
+        return $this->hasMany(Mention::class, 'commentaire_id');
     }
 }

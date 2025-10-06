@@ -24,7 +24,8 @@ class Categorie extends Model
     protected $fillable = [
         'date',
         'nom',
-        'ID_carte',
+        'carte_id',
+        'article_id',
     ];
 
     /**
@@ -41,6 +42,14 @@ class Categorie extends Model
      */
     public function carte()
     {
-        return $this->belongsTo(Carte::class, 'ID_carte');
+        return $this->belongsTo(Carte::class, 'carte_id');
+    }
+
+    /**
+     * Obtenir l'article auquel la catégorie appartient.
+     */
+    public function article()
+    {
+        return $this->belongsTo(Article::class, 'article_id');
     }
 }

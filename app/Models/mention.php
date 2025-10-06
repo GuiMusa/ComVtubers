@@ -24,6 +24,7 @@ class Mention extends Model
     protected $fillable = [
         'date',
         'contenu',
+        'commentaire_id',
     ];
 
     /**
@@ -36,10 +37,10 @@ class Mention extends Model
     ];
 
     /**
-     * Obtenir les commentaires pour la mention.
+     * Obtenir le commentaire auquel la mention appartient.
      */
-    public function commentaires()
+    public function commentaire()
     {
-        return $this->hasMany(Commentaire::class, 'ID_mention');
+        return $this->belongsTo(Commentaire::class, 'commentaire_id');
     }
 }

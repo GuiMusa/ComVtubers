@@ -35,6 +35,6 @@ class Carte extends Model
      */
     public function categories()
     {
-        return $this->hasMany(Categorie::class, 'ID_carte');
+        return $this->hasMany(Categorie::class, 'carte_id');
     }
 }

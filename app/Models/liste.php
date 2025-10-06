@@ -24,7 +24,6 @@ class Liste extends Model
     protected $fillable = [
         'date',
         'favoris',
-        'ID_article',
     ];
 
     /**
@@ -38,10 +37,10 @@ class Liste extends Model
     ];
 
     /**
-     * Obtenir l'article auquel la liste est associée.
+     * Obtenir les articles associés à cette liste.
      */
-    public function article()
+    public function articles()
     {
-        return $this->belongsTo(Article::class, 'ID_article');
+        return $this->hasMany(Article::class, 'liste_id');
     }
 }
