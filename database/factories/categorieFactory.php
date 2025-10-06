@@ -17,7 +17,8 @@ class CategorieFactory extends Factory
         return [
             'date' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'nom' => $this->faker->randomElement($vTuberCategories),
-            'ID_carte' => \App\Models\Carte::inRandomOrder()->first()?->id ?? \App\Models\Carte::factory(),
+            'carte_id' => \App\Models\Carte::factory(),
+            'article_id' => \App\Models\Article::factory(),
         ];
     }
 }

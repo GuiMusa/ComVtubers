@@ -19,8 +19,7 @@ class UtilisateurFactory extends Factory
             'photo_de_profil' => $this->faker->imageUrl(200, 200, 'people', true, 'avatar'),
             'mail' => $this->faker->unique()->safeEmail(),
             'mdp' => Hash::make('password123'),
-            'statue' => $this->faker->randomElement(['actif', 'inactif', 'banni', 'modérateur']),
-            'ID_article' => null, // À définir selon vos relations
+            'statue' => $this->faker->randomElement(['actif', 'inactif', 'banni', 'modérateur'])
         ];
     }
 }

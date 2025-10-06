@@ -3,47 +3,50 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CleanAndSeedSeeder extends Seeder
 {
     /**
-     * Nettoie complètement la base de données et réexécute les seeders.
-     * 
-     * Usage: php artisan db:seed --class=CleanAndSeedSeeder
+     * Nettoie les tables et réexécute les seeders principaux.
+     * NOTE : Il est souvent préférable d'utiliser `php artisan migrate:fresh --seed`.
+     *
+     * @return void
      */
     public function run(): void
     {
-        // Désactiver les contraintes de clés étrangères
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        
-        // Obtenir toutes les tables
-        $tables = DB::select('SHOW TABLES');
-        $dbName = env('DB_DATABASE');
-        
-        echo "🗑️  Nettoyage de la base de données...\n";
-        
-        // Tronquer toutes les tables sauf 'migrations'
-        foreach ($tables as $table) {
-            $tableName = $table->{"Tables_in_$dbName"};
-            
-            if ($tableName !== 'migrations') {
-                DB::table($tableName)->truncate();
-                echo "   ✓ Table '$tableName' nettoyée\n";
-            }
+        if ($this->command->getOutput()->isQuiet()) {
+            $this->runSilent();
+        } else {
+            $this->runVerbose();
         }
-        
-        // Réactiver les contraintes
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        
-        echo "\n🌱 Exécution des seeders...\n";
-        
-        // Exécuter le DatabaseSeeder principal
-        $this->call([
-            DatabaseSeeder::class,
-        ]);
-        
-        echo "\n✅ Base de données réinitialisée avec succès !\n";
+    }
+
+    private function runVerbose(): void
+    {
+        $this->command->warn('Cette commande va vider toutes vos tables. La commande `migrate:fresh --seed` est souvent une meilleure alternative.');
+        if (!$this->command->confirm('Voulez-vous continuer ?')) {
+            $this->command->info('Opération annulée.');
+            return;
+        }
+
+        $this->command->call('db:wipe');
+        $this->command->call('migrate');
+        $this->command->call('db:seed');
+    }
+
+    private function runSilent(): void
+    {
+        Schema::disableForeignKeyConstraints();
+        \App\Models\Mention::truncate();
+        \App\Models\Categorie::truncate();
+        \App\Models\Commentaire::truncate();
+        \App\Models\Article::truncate();
+        \App\Models\Liste::truncate();
+        \App\Models\Carte::truncate();
+        \App\Models\Utilisateur::truncate();
+        Schema::enableForeignKeyConstraints();
+
+        $this->call(DatabaseSeeder::class);
     }
 }

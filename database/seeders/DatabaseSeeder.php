@@ -27,5 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             testSeeder::class,
         ]);
+
+        $this->command->info('🌱 Base de données initialisée avec les données de test.');
     }
 }

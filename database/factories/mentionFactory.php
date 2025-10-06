@@ -11,6 +11,7 @@ class MentionFactory extends Factory
         return [
             'date' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'contenu' => $this->faker->sentence(),
+            'commentaire_id' => \App\Models\Commentaire::factory(),
         ];
     }
 }

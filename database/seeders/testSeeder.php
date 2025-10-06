@@ -9,39 +9,29 @@ class testSeeder extends Seeder
 {
     public function run(): void
     {
-        // Désactiver temporairement les contraintes de clés étrangères
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        
-        // Nettoyer les tables avant d'insérer (optionnel, décommenter si nécessaire)
-        // \App\Models\Categorie::truncate();
-        // \App\Models\Liste::truncate();
-        // \App\Models\Commentaire::truncate();
-        // \App\Models\Article::truncate();
-        // \App\Models\Utilisateur::truncate();
-        // \App\Models\Carte::truncate();
-        // \App\Models\Mention::truncate();
-        
-        // Création dans l'ordre pour respecter les relations
-        // 1. D'abord les tables sans dépendances
-        \App\Models\Mention::factory(50)->create();
-        \App\Models\Carte::factory(20)->create();
-        
-        // 2. Ensuite les utilisateurs (dépendent d'articles mais on met null pour l'instant)
-        \App\Models\Utilisateur::factory(50)->create();
-        
-        // 3. Les articles (dépendent de commentaires mais on met null)
-        \App\Models\Article::factory(100)->create();
-        
-        // 4. Les commentaires (dépendent d'utilisateurs et mentions)
-        \App\Models\Commentaire::factory(200)->create();
-        
-        // 5. Les listes (dépendent d'articles)
-        \App\Models\Liste::factory(30)->create();
-        
-        // 6. Les catégories (dépendent de cartes)
-        \App\Models\Categorie::factory(40)->create();
-        
-        // Réactiver les contraintes de clés étrangères
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        // 1. Créer les entités sans dépendances externes
+        $utilisateurs = \App\Models\Utilisateur::factory(50)->create();
+        $listes = \App\Models\Liste::factory(30)->create();
+        $cartes = \App\Models\Carte::factory(20)->create();
+
+        // 2. Créer les articles en utilisant les utilisateurs et listes créés
+        $articles = \App\Models\Article::factory(100)->recycle($utilisateurs)->recycle($listes)->create();
+
+        // 3. Créer les commentaires en utilisant les utilisateurs et articles créés
+        $commentaires = \App\Models\Commentaire::factory(200)->recycle($utilisateurs)->recycle($articles)->create();
+
+        // 4. Créer les catégories en utilisant les cartes et articles créés
+        //    Cela simule une relation plusieurs-à-plusieurs
+        \App\Models\Categorie::factory(40)
+            ->recycle($cartes)
+            ->recycle($articles)
+            ->create();
+
+        // 5. Créer les mentions en utilisant les commentaires créés
+        \App\Models\Mention::factory(50)
+            ->recycle($commentaires)
+            ->create();
+
+        $this->command->info('✅ testSeeder a terminé avec succès.');
     }
 }

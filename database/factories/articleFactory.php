@@ -26,7 +26,8 @@ class ArticleFactory extends Factory
             'titre' => $this->faker->randomElement($vTuberTopics),
             'statue' => $this->faker->randomElement(['brouillon', 'publié', 'archivé']),
             'favoris' => $this->faker->boolean(30),
-            'ID_commentaire' => null, // À définir selon vos relations
+            'utilisateur_id' => \App\Models\Utilisateur::factory(),
+            'liste_id' => \App\Models\Liste::factory(),
         ];
     }
 }
