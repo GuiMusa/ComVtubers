@@ -11,9 +11,10 @@ class utilisateurController extends Controller
      public function index()
     {
         // Récupérer les 10 derniers articles avec pagination
-        $articles = Article::where('statue', 'actif') // Si vous voulez filtrer par statut
-                          ->orderBy('date', 'desc')
-                          ->paginate(10);
+        $articles = Article::with('utilisateur', 'categories') // Pré-chargement des relations
+                           ->where('statue', 'actif') // Si vous voulez filtrer par statut
+                           ->orderBy('date', 'desc')
+                           ->paginate(10);
         
         return view('index', compact('articles'));
     }

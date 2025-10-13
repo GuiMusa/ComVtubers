@@ -24,6 +24,7 @@ class Article extends Model
     protected $fillable = [
         'date',
         'titre',
+        'image',
         'statue',
         'favoris',
         'utilisateur_id',

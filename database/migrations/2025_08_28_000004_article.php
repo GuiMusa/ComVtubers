@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->dateTime('date');
             $table->string('titre');
+            $table->string('image')->nullable();
             $table->enum('statue', ['brouillon', 'publié', 'archivé'])->default('brouillon');
             $table->boolean('favoris')->default(false);
             $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');

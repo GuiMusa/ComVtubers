@@ -4,283 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Forum de discussion')</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
             background-color: #f5f5f5;
-            color: #333;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        
-        /* Header styles */
-        header {
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 15px 0;
-            margin-bottom: 20px;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .forum-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background-color: #f0f2f5;
-            border-radius: 20px;
-            padding: 8px 15px;
-            width: 300px;
-        }
-        
-        .search-bar input {
-            background: transparent;
-            border: none;
-            outline: none;
-            width: 100%;
-            margin-left: 8px;
-            font-size: 14px;
-        }
-        
-        .search-bar input::placeholder {
-            color: #65676b;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 20px;
-        }
-        
-        .nav-links a {
-            text-decoration: none;
-            color: #2c3e50;
-            font-weight: 500;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: background-color 0.2s;
-        }
-        
-        .nav-links a:hover {
-            background-color: #f0f2f5;
-        }
-        
-        .nav-links a.active {
-            color: #1877f2;
-            background-color: #e7f3ff;
-        }
-        
-        /* Main content area */
-        .main-content {
-            display: flex;
-            gap: 20px;
-            min-height: 70vh;
-        }
-        
-        .sidebar {
-            width: 250px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 20px;
-        }
-        
-        .sidebar h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-            font-size: 18px;
-        }
-        
-        .sidebar ul {
-            list-style: none;
-        }
-        
-        .sidebar li {
-            margin-bottom: 10px;
-        }
-        
-        .sidebar a {
-            text-decoration: none;
-            color: #4a5568;
-            display: block;
-            padding: 8px 10px;
-            border-radius: 4px;
-            transition: background-color 0.2s;
-        }
-        
-        .sidebar a:hover {
-            background-color: #f7fafc;
-        }
-        
-        .content {
-            flex: 1;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 20px;
-        }
-        
-        .content h1 {
-            margin-bottom: 20px;
-            color: #2c3e50;
-            font-size: 24px;
-        }
-        
-        /* Forum topics */
-        .topic {
-            border-bottom: 1px solid #e2e8f0;
-            padding: 15px 0;
-        }
-        
-        .topic:last-child {
-            border-bottom: none;
-        }
-        
-        .topic-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-        
-        .topic-title a {
-            text-decoration: none;
-            color: #2c3e50;
-        }
-        
-        .topic-meta {
-            color: #718096;
-            font-size: 14px;
-        }
-        
-        /* Footer */
-        footer {
-            margin-top: 30px;
-            padding: 20px 0;
+        #back-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            display: none;
+            z-index: 99;
+            width: 50px;
+            height: 50px;
             text-align: center;
-            color: #718096;
-            font-size: 14px;
-            border-top: 1px solid #e2e8f0;
+            line-height: 1.9;
+            font-size: 1.5rem;
         }
 
-        .login-btn {
-            background-color: #1877f2;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            text-decoration: none;
+        /* Nouveau style pour la flèche (triangle CSS) */
+        .arrow-indicator {
+            border: solid black;
+            border-width: 0 2px 2px 0;
             display: inline-block;
-        }
-        
-        .login-btn:hover {
-            background-color: #166fe5;
-        }
-
-        /* Styles pour la pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
+            padding: 3px;
+            transform: rotate(-45deg); /* Flèche pointant vers la droite */
+            -webkit-transform: rotate(-45deg);
+            transition: transform 0.3s ease;
         }
 
-        .pagination li {
-            margin: 0 5px;
-        }
+/* Cible le lien lorsque le menu est déplié */
+a[aria-expanded="true"] .arrow-indicator {
+    transform: rotate(45deg); /* Fait pivoter la flèche vers le bas */
+    -webkit-transform: rotate(45deg);
+}
 
-        .pagination a, .pagination span {
-            display: inline-block;
-            padding: 8px 16px;
-            text-decoration: none;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            color: #4a5568;
-            transition: all 0.2s;
-        }
-
-        .pagination a:hover {
-            background-color: #f7fafc;
-            border-color: #cbd5e0;
-        }
-
-        .pagination .active span {
-            background-color: #1877f2;
-            color: white;
-            border-color: #1877f2;
-        }
-
-        .pagination .disabled span {
-            color: #a0aec0;
-            cursor: not-allowed;
-        }
     </style>
 </head>
-<body>
-    <header>
+<body class="d-flex flex-column min-vh-100">
+    <header class="bg-white shadow-sm py-3">
         <div class="container">
-            <div class="header-content">
-                <div class="forum-title">ComVtuber</div>
-                <div class="search-bar">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#65676b">
-                        <path d="M10.25 2a8.25 8.25 0 0 1 6.34 13.53l5.69 5.69a.75.75 0 1 1-1.06 1.06l-5.69-5.69A8.25 8.25 0 1 1 10.25 2zm0 1.5a6.75 6.75 0 1 0 0 13.5 6.75 6.75 0 0 0 0-13.5z"></path>
-                    </svg>
-                    <input type="text" placeholder="Rechercher un sujet...">
-                </div>
-                <div class="nav-links">
-                    <a href="{{ route('home') }}" class="active">Accueil</a>
-                    <a href="#">Articles</a>
-                    <a href="#">Vtubers</a>
-                </div>
-                <a href="#" class="login-btn">Connexion</a>
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="fs-4 fw-bold text-dark text-decoration-none" href="{{ route('home') }}">ComVtuber</a>
+                <form class="d-flex" style="width: 300px;">
+                    <input class="form-control me-2" type="search" placeholder="Rechercher un sujet..." aria-label="Search">
+                </form>
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a href="{{ route('home') }}" class="nav-link active" aria-current="page">Accueil</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Articles</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link">Vtubers</a></li>
+                </ul>
+                <a href="#" class="btn btn-primary">Connexion</a>
             </div>
         </div>
     </header>
 
-    <div class="container">
-        <div class="main-content">
-            <!-- Sidebar optionnelle -->
-            <aside class="sidebar">
-                <h3>Catégories</h3>
-                <ul>
-                    <li><a href="#">Tous les articles</a></li>
-                    <li><a href="#">Populaires</a></li>
-                    <li><a href="#">Récents</a></li>
-                    <li><a href="#">Favoris</a></li>
-                </ul>
-            </aside>
-
-            <!-- Contenu principal -->
-            <main class="content">
-                @yield('content')
-            </main>
+    <div class="container mt-4">
+        <div class="row">
+            @yield('content-with-sidebar')
         </div>
     </div>
 
-    <footer>
+    <footer class="mt-auto py-3 text-center text-muted border-top bg-white">
         <div class="container">
             <p>&copy; {{ date('Y') }} ComVtuber. Tous droits réservés.</p>
         </div>
     </footer>
+
+    <!-- Bouton Back to Top -->
+    <a href="#" id="back-to-top" class="btn btn-primary rounded-circle shadow">
+        &uarr;
+    </a>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+    <script>
+        let mybutton = document.getElementById("back-to-top");
+
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        };
+
+        mybutton.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
 </body>
 </html>
