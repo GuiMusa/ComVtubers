@@ -7,7 +7,10 @@
 
     <!-- Contenu principal -->
     <main class="col-md-6">
-        <h1>Les articles recents</h1>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="mb-0">Les articles récents</h1>
+            <a href="{{ route('articles.create') }}" class="btn btn-primary">Créer un article</a>
+        </div>
         
         <!-- Contrôle de pagination en haut -->
         <div class="d-flex justify-content-center mb-4">
