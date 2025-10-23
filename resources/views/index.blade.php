@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.base')
 
 @section('title', 'Accueil du Forum')
 @section('content-with-sidebar')
