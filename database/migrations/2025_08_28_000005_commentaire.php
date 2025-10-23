@@ -13,7 +13,7 @@ return new class extends Migration
             $table->dateTime('date');
             $table->text('contenu');
             $table->string('image')->nullable();
-            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('article_id')->constrained('articles')->onDelete('cascade');
             $table->timestamps();
         });

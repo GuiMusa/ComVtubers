@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->enum('statue', ['brouillon', 'publié', 'archivé'])->default('brouillon');
             $table->boolean('favoris')->default(false);
-            $table->foreignId('utilisateur_id')->constrained('utilisateurs')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('liste_id')->constrained('listes')->onDelete('cascade');
             $table->timestamps();
         });

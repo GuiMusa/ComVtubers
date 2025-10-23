@@ -25,7 +25,7 @@ class Commentaire extends Model
         'date',
         'contenu',
         'image',
-        'utilisateur_id',
+        'user_id',
         'article_id',
     ];
 
@@ -41,9 +41,9 @@ class Commentaire extends Model
     /**
      * Obtenir l'utilisateur qui a posté le commentaire.
      */
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'utilisateur_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

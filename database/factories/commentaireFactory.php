@@ -25,7 +25,7 @@ class CommentaireFactory extends Factory
             'date' => $this->faker->dateTimeBetween('-1 month', 'now'),
             'contenu' => $this->faker->randomElement($vTuberComments) . ' ' . $this->faker->sentence(),
             'image' => $this->faker->optional(0.3)->imageUrl(300, 200, 'anime', true),
-            'utilisateur_id' => \App\Models\Utilisateur::factory(),
+            'user_id' => \App\Models\User::factory(),
             'article_id' => \App\Models\Article::factory(),
         ];
     }

@@ -27,7 +27,7 @@ class Article extends Model
         'image',
         'statue',
         'favoris',
-        'utilisateur_id',
+        'user_id',
         'liste_id',
     ];
 
@@ -44,9 +44,9 @@ class Article extends Model
     /**
      * Obtenir l'utilisateur qui a créé l'article.
      */
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'utilisateur_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     /**

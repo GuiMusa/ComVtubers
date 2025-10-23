@@ -11,12 +11,12 @@ class ArticleController extends Controller
     public function index()
     {
         // Articles récents pour le contenu principal
-        $articles = Article::with('utilisateur', 'categories')
+        $articles = Article::with('user', 'categories')
                            ->orderBy('date', 'desc')
                            ->paginate(10);
 
         // Articles recommandés (aléatoires) pour la barre latérale droite
-        $recommendedArticles = Article::with('utilisateur', 'categories')
+        $recommendedArticles = Article::with('user', 'categories')
                                       ->inRandomOrder()
                                       ->where('statue', 'publié') // On ne recommande que les articles publiés
                                       ->take(5)
@@ -32,7 +32,7 @@ class ArticleController extends Controller
 
     // On a besoin des articles recommandés pour la barre latérale droite,
     // qui est incluse dans la vue 'createArticle'.
-    $recommendedArticles = Article::with('utilisateur', 'categories')
+    $recommendedArticles = Article::with('user', 'categories')
                                   ->inRandomOrder()
                                   ->where('statue', 'publié')
                                   ->take(5)

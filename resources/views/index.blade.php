@@ -30,8 +30,8 @@
                             <p class="card-text">
                                 <small class="text-muted">
                                     Publié le {{ \Carbon\Carbon::parse($article->date)->format('d/m/Y à H:i') }}
-                                    @if($article->utilisateur)
-                                        par <strong>{{ $article->utilisateur->pseudo }}</strong>
+                                    @if($article->user)
+                                        par <strong>{{ $article->user->name }}</strong>
                                     @endif
                                 </small>
                             </p>

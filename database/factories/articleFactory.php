@@ -27,7 +27,7 @@ class ArticleFactory extends Factory
             'image' => $this->faker->optional(0.8)->imageUrl(640, 480, 'cats', true, 'vtuber'),
             'statue' => $this->faker->randomElement(['brouillon', 'publié', 'archivé']),
             'favoris' => $this->faker->boolean(30),
-            'utilisateur_id' => \App\Models\Utilisateur::factory(),
+            'user_id' => \App\Models\User::factory(),
             'liste_id' => \App\Models\Liste::factory(),
         ];
     }

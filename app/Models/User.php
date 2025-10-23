@@ -19,8 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'photo_de_profil',
         'email',
         'password',
+        'statue',
     ];
 
     /**
@@ -44,5 +46,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Obtenir tous les articles de l'utilisateur.
+     */
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'user_id');
+    }
+
+    /**
+     * Obtenir tous les commentaires de l'utilisateur.
+     */
+    public function commentaires()
+    {
+        return $this->hasMany(Commentaire::class, 'user_id');
     }
 }
