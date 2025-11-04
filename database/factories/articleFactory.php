@@ -24,6 +24,7 @@ class ArticleFactory extends Factory
         return [
             'date' => $this->faker->dateTimeBetween('-6 months', 'now'),
             'titre' => $this->faker->randomElement($vTuberTopics),
+            'contenu' => $this->faker->realText(800), // Ajout du contenu
             'image' => $this->faker->optional(0.8)->imageUrl(640, 480, 'cats', true, 'vtuber'),
             'statue' => $this->faker->randomElement(['brouillon', 'publié', 'archivé']),
             'favoris' => $this->faker->boolean(30),
