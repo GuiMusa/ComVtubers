@@ -17,7 +17,7 @@ class Article extends Model
     protected $table = 'articles';
 
     /**
-     * Les attributs qui peuvent être assignés en masse.
+     * Les attributs qui peuvent être assignés en masse.j
      *
      * @var array<int, string>
      */
