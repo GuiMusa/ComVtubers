@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
+        <meta charset="utf-t">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -14,17 +14,17 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 flex flex-col">
+    <body class="font-sans antialiased bg-gradient-body text-brand-text">
+        <div class="min-h-screen flex flex-col">
             {{-- @include('layouts.navigation') --}}
-            <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+            <nav x-data="{ open: false }" class="bg-white/80 backdrop-blur-sm border-b border-kaki-300 sticky top-0 z-50">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex">
                             <!-- Logo -->
                             <div class="shrink-0 flex items-center">
-                                <a href="{{ route('home') }}" class="text-xl font-bold text-gray-800 no-underline">
+                                <a href="{{ route('home') }}" class="text-xl font-bold no-underline bg-clip-text text-transparent bg-gradient-to-r from-kaki-700 to-gold">
                                     {{-- {{ config('app.name', 'ComVtuber') }} --}}
                                     ComVtuber
                                 </a>
@@ -47,7 +47,7 @@
                         <!-- Search Bar from base.blade.php -->
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <form class="flex w-80">
-                                <input class="form-input w-full rounded-md shadow-sm" type="search" placeholder="Rechercher un sujet..." aria-label="Search">
+                                <input class="form-input w-full rounded-md shadow-sm border-kaki-300 focus:border-gold focus:ring-gold" type="search" placeholder="Rechercher un sujet..." aria-label="Search">
                             </form>
                         </div>
             
@@ -55,7 +55,7 @@
                         <div class="hidden sm:flex sm:items-center sm:ms-6">
                             <x-dropdown align="right" width="48">
                                 <x-slot name="trigger">
-                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                    <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-brand-text/80 bg-white/50 hover:text-brand-text focus:outline-none transition ease-in-out duration-150">
                                         <div>{{ Auth::user()->name }}</div>
             
                                         <div class="ms-1">
@@ -79,7 +79,7 @@
                                                 onclick="event.preventDefault();
                                                             this.closest('form').submit();">
                                             {{ __('Log Out') }}
-                                        </x-dropdown-link>
+                                        </x-dropdown-link>.
                                     </form>
                                 </x-slot>
                             </x-dropdown>
@@ -134,7 +134,7 @@
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow">
+                <header class="bg-kaki-50/50 shadow-md">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -147,7 +147,7 @@
             </main>
 
             <!-- Footer from base.blade.php -->
-            <footer class="mt-auto py-3 text-center text-gray-500 border-t bg-white">
+            <footer class="mt-auto py-8 text-center text-kaki-200 bg-gradient-footer">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <p>&copy; {{ date('Y') }} ComVtuber. Tous droits réservés.</p>
                 </div>
@@ -155,7 +155,7 @@
         </div>
 
         <!-- Back to Top Button -->
-        <a href="#" id="back-to-top" class="hidden fixed bottom-6 right-6 bg-blue-600 text-white rounded-full shadow-lg w-12 h-12 flex items-center justify-center text-2xl hover:bg-blue-700 transition-colors duration-300">
+        <a href="#" id="back-to-top" class="hidden fixed bottom-6 right-6 bg-gradient-gold text-white rounded-full shadow-lg w-12 h-12 flex items-center justify-center text-2xl hover:opacity-90 transition-all duration-300">
             &uarr;
         </a>
 

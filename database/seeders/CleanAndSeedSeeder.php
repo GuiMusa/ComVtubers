@@ -42,7 +42,6 @@ class CleanAndSeedSeeder extends Seeder
         \App\Models\Categorie::truncate();
         \App\Models\Commentaire::truncate();
         \App\Models\Article::truncate();
-        \App\Models\Liste::truncate();
         \App\Models\Carte::truncate();
         \App\Models\User::truncate();
         Schema::enableForeignKeyConstraints();

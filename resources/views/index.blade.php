@@ -1,70 +1,88 @@
 @extends('layouts.base')
 
-@section('title', 'Accueil du Forum')
+@section('title', 'Accueil - Les derniers articles')
+
 @section('content-with-sidebar')
-    <!-- Barre latérale -->
     @include('layouts.Lsidebar')
 
-    <!-- Contenu principal -->
-    <main class="col-md-6">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="mb-0">Les articles récents</h1>
-            <a href="{{ route('articles.create') }}" class="btn btn-primary">Créer un article</a>
-        </div>
-        
-        <!-- Contrôle de pagination en haut -->
-        <div class="d-flex justify-content-center mb-4">
-            {{ $articles->links('pagination::bootstrap-5') }}
-        </div>
-    
-        <!-- Liste des articles -->
-        <div class="row">
-            @forelse($articles as $article)
-                <div class="col-md-6 mb-4">
-                    <div class="card">
-                        @if($article->image)
-                            <img src="{{ $article->image }}" class="card-img-top" alt="Image pour {{ $article->titre }}">
-                        @endif
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $article->titre }}</h5>
-                            <p class="card-text">
-                                <small class="text-muted">
-                                    Publié le {{ \Carbon\Carbon::parse($article->date)->format('d/m/Y à H:i') }}
-                                    @if($article->user)
-                                        par <strong>{{ $article->user->name }}</strong>
-                                    @endif
-                                </small>
-                            </p>
-    
-                            @if($article->categories->isNotEmpty())
-                                <div class="mb-2">
-                                    @foreach($article->categories as $categorie)
-                                        <span class="badge bg-secondary">{{ $categorie->nom }}</span>
-                                    @endforeach
-                                </div>
-                            @endif
-    
-                            @if($article->favoris)
-                                <span class="badge bg-warning">⭐ Favoris</span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+    <main class="col-md-6 article-main-content">
+        @auth
+            <div class="mb-4 text-center">
+                <a href="{{ route('articles.create') }}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-plus-circle me-2"></i> Créer un article
+                </a>
+            </div>
+        @endauth
+        <div id="articles-container">
+            @forelse ($articles as $article)
+                @include('partials._article-card', ['article' => $article])
             @empty
-                <div class="col-12">
-                    <div class="alert alert-info">
-                        Aucun article disponible pour le moment.
-                    </div>
+                <div class="p-4 p-md-5 rounded text-center empty-state">
+                    <h1 class="display-5 fw-bolder">Bienvenue !</h1>
+                    <p class="lead">Aucun article n'a été publié pour le moment.</p>
+                    <p>Revenez bientôt pour découvrir nos contenus.</p>
+                    @auth
+                        <a href="{{ route('articles.create') }}" class="btn btn-primary mt-3">Écrire le premier article</a>
+                    @endauth
                 </div>
             @endforelse
         </div>
-    
-        <!-- Contrôle de pagination en bas -->
-        <div class="d-flex justify-content-center mt-4">
-            {{ $articles->links('pagination::bootstrap-5') }}
-        </div>
+
+        @if ($articles->hasMorePages())
+            <div class="d-flex justify-content-center mt-4">
+                <button id="load-more" class="btn btn-lg btn-outline-primary">Charger plus d'articles</button>
+            </div>
+        @endif
     </main>
 
-    <!-- Barre latérale droite -->
     @include('layouts.Rsidebar')
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const loadMoreButton = document.getElementById('load-more');
+    if (!loadMoreButton) {
+        return;
+    }
+
+    let nextPageUrl = '{{ $articles->nextPageUrl() }}';
+
+    loadMoreButton.addEventListener('click', function () {
+        if (!nextPageUrl) {
+            return;
+        }
+
+        loadMoreButton.disabled = true;
+        loadMoreButton.textContent = 'Chargement...';
+
+        fetch(nextPageUrl, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.articles_html) {
+                const articlesContainer = document.getElementById('articles-container');
+                articlesContainer.insertAdjacentHTML('beforeend', data.articles_html);
+            }
+            
+            nextPageUrl = data.next_page_url;
+
+            if (nextPageUrl) {
+                loadMoreButton.disabled = false;
+                loadMoreButton.textContent = "Charger plus d'articles";
+            } else {
+                loadMoreButton.style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement des articles:', error);
+            loadMoreButton.disabled = false;
+            loadMoreButton.textContent = "Erreur. Réessayer";
+        });
+    });
+});
+</script>
+@endpush

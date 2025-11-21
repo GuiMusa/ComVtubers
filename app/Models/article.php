@@ -29,7 +29,6 @@ class Article extends Model
         'statue',
         'favoris',
         'user_id',
-        'liste_id',
     ];
 
     /**
@@ -48,14 +47,6 @@ class Article extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-
-    /**
-     * Obtenir la liste à laquelle l'article appartient.
-     */
-    public function liste()
-    {
-        return $this->belongsTo(Liste::class, 'liste_id');
     }
 
     /**

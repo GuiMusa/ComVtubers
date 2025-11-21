@@ -29,7 +29,6 @@ class ArticleFactory extends Factory
             'statue' => $this->faker->randomElement(['brouillon', 'publié', 'archivé']),
             'favoris' => $this->faker->boolean(30),
             'user_id' => \App\Models\User::factory(),
-            'liste_id' => \App\Models\Liste::factory(),
         ];
     }
 }

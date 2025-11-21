@@ -25,6 +25,7 @@ class Mention extends Model
         'date',
         'contenu',
         'commentaire_id',
+        'user_id',
     ];
 
     /**
@@ -42,5 +43,13 @@ class Mention extends Model
     public function commentaire()
     {
         return $this->belongsTo(Commentaire::class, 'commentaire_id');
+    }
+
+    /**
+     * Obtenir l'utilisateur qui a créé la mention.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -1,39 +1,21 @@
-<!-- Barre latérale droite -->
+<!-- Barre latérale droite - Don Juan -->
 <aside class="col-md-3">
-    <div class="card">
-        <div class="card-header">
-            Articles Recommandés
-        </div>
-        <div class="card-body">
+    <div class="sidebar-block don-juan-sidebar">
+        <h3 class="sidebar-title">Mes Confidences</h3>
+        <div class="diary-card-container">
             @forelse($recommendedArticles as $article)
-                <div class="mb-3">
+                <a href="{{ route('articles.show', $article) }}" class="diary-card">
                     @if($article->image)
-                        <img src="{{ $article->image }}" class="img-fluid rounded mb-2" alt="Image pour {{ $article->titre }}">
+                        <img src="{{ $article->image }}" class="diary-image" alt="">
                     @endif
-                    <h6 class="card-title mb-1">{{ $article->titre }}</h6>
-                    <p class="card-text">
-                        <small class="text-muted">
-                            Publié le {{ \Carbon\Carbon::parse($article->date)->format('d/m/Y') }}
-                            @if($article->user)
-                                par <strong>{{ $article->user->name }}</strong>
-                            @endif
-                        </small>
+                    <h4 class="diary-title">{{ $article->titre }}</h4>
+                    <p class="diary-meta">
+                        Par {{ $article->user->name ?? 'un secret' }}
                     </p>
-                    @if($article->categories->isNotEmpty())
-                        <div class="mb-2">
-                            @foreach($article->categories as $categorie)
-                                <span class="badge bg-secondary">{{ $categorie->nom }}</span>
-                            @endforeach
-                        </div>
-                    @endif
-                    @if($loop->last)
-                    @else
-                        <hr>
-                    @endif
-                </div>
+                </a>
             @empty
-                <div class="alert alert-info">
-                    Aucun article à recommander.
+                <div class="text-center text-muted">
+                    Aucun secret à partager pour le moment.
                 </div>
             @endforelse
         </div>

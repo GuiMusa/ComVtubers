@@ -41,7 +41,20 @@ class SidebarComposer
                                        ->get();
         }
         
-        // 10article vues pas encore creer 
+        // Récupérer les IDs des articles récemment vus depuis la session
+        $lastViewedArticleIds = session('last_viewed_articles', []);
+        
+        // Charger les articles récemment vus, en maintenant l'ordre de la session
+        $lastViewedArticles = collect();
+        if (!empty($lastViewedArticleIds)) {
+            $lastViewedArticles = Article::whereIn('id', $lastViewedArticleIds)
+                                          ->where('statue', 'publié') // Assurez-vous qu'ils sont publiés
+                                          ->get()
+                                          ->sortBy(function($article) use ($lastViewedArticleIds) {
+                                              return array_search($article->id, $lastViewedArticleIds);
+                                          });
+        }
+        
         $view->with(compact('userArticles', 'favoriteArticles', 'lastViewedArticles'));
     }
 }
