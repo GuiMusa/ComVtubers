@@ -254,16 +254,47 @@
             color: var(--theme-text-muted);
         }
         
-        /* --- SCROLL TO TOP --- */
-        #back-to-top {
-            background-color: var(--theme-secondary);
-            color: #fff;
-            border: 2px solid #fff;
-            transition: background-color 0.3s, transform 0.3s;
+        /* --- SCROLL TO TOP BUTTON --- */
+        .back-to-top-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--theme-secondary), #ffc478);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255, 179, 71, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
         }
-        #back-to-top:hover {
-            background-color: var(--theme-primary);
-            transform: scale(1.1);
+        
+        .back-to-top-btn:hover {
+            background: linear-gradient(135deg, var(--theme-primary), #ff9aa2);
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(255, 182, 193, 0.5);
+        }
+        
+        .back-to-top-btn.show {
+            display: flex;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* --- SIDEBAR ARROW --- */
@@ -301,18 +332,101 @@
             color: #fff;
             font-weight: 400;
         }
-        .article-card .btn-primary {
-            background-color: transparent;
-            border: 1px solid var(--theme-primary);
-            color: var(--theme-primary);
+        
+        /* Custom "Lire la suite" button */
+        .btn-read-more {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--theme-primary), #ff9aa2);
+            color: white;
+            text-decoration: none;
             font-weight: 600;
-            border-radius: 20px;
-            transition: background-color 0.2s, color 0.2s;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
+            transition: all 0.3s ease;
         }
-        .article-card .btn-primary:hover {
-            background-color: var(--theme-primary);
-            color: #fff;
+        
+        .btn-read-more:hover {
+            background: linear-gradient(135deg, #ff9aa2, var(--theme-primary));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 182, 193, 0.4);
         }
+        
+        .btn-read-more i {
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-read-more:hover i {
+            transform: translateX(5px);
+        }
+        
+        /* Article page action buttons */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(161, 136, 127, 0.1);
+            color: var(--theme-text);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 25px;
+            border: 2px solid var(--theme-text-muted);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-back:hover {
+            background: var(--theme-text-muted);
+            color: white;
+            border-color: var(--theme-text-muted);
+            transform: translateX(-5px);
+        }
+        
+        .btn-edit-article,
+        .btn-delete-article {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 42px;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .btn-edit-article {
+            background: linear-gradient(135deg, #9d4edd, #b794f6);
+            box-shadow: 0 3px 12px rgba(157, 78, 221, 0.3);
+        }
+        
+        .btn-edit-article:hover {
+            background: linear-gradient(135deg, #b794f6, #9d4edd);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 18px rgba(157, 78, 221, 0.4);
+        }
+        
+        .btn-delete-article {
+            background: linear-gradient(135deg, #dc3545, #e63946);
+            box-shadow: 0 3px 12px rgba(220, 53, 69, 0.3);
+        }
+        
+        .btn-delete-article:hover {
+            background: linear-gradient(135deg, #e63946, #dc3545);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 18px rgba(220, 53, 69, 0.4);
+        }
+        
+        /* Removed .article-card .btn-primary override - using global button styles */
         .empty-state {
             background-color: var(--theme-surface);
             border: 2px dashed var(--theme-primary);
@@ -330,108 +444,312 @@
             resize: none;
         }
 
-        /* --- SIDEBARS --- */
-        .sidebar-block {
-            background-color: rgba(255, 255, 255, 0.6);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 5px 15px -5px rgba(93, 64, 55, 0.1);
+        /* === GLOBAL BUTTON STYLES === */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--theme-primary), #ff9aa2);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 182, 193, 0.3);
         }
-        .sidebar-block h3 {
-            color: var(--theme-text);
-            border-bottom: 1px solid var(--theme-primary);
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #ff9aa2, var(--theme-primary));
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 182, 193, 0.4);
         }
-        .sidebar-block a, .sidebar-block .nav-link {
-            color: var(--theme-text-muted) !important;
-            text-decoration: none;
-            transition: color 0.2s;
+        
+        .btn-secondary {
+            background: var(--theme-text-muted);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
         }
-        .sidebar-block a:hover, .sidebar-block .nav-link:hover {
-            color: var(--theme-primary) !important;
+        .btn-secondary:hover {
+            background: var(--theme-text);
+            color: #fff;
+            transform: translateY(-2px);
         }
-        .sidebar-block .card-title {
-            color: var(--theme-text) !important;
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #34c759);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
         }
+        .btn-success:hover {
+            background: linear-gradient(135deg, #34c759, #28a745);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+        
+        .btn-outline-primary {
+            background: transparent;
+            border: 2px solid var(--theme-primary);
+            color: var(--theme-primary);
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-primary:hover {
+            background: var(--theme-primary);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-secondary {
+            background: transparent;
+            border: 2px solid var(--theme-text-muted);
+            color: var(--theme-text-muted);
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-secondary:hover {
+            background: var(--theme-text-muted);
+            color: #fff;
+        }
+        
+        .btn-outline-danger {
+            background: transparent;
+            border: 2px solid #dc3545;
+            color: #dc3545;
+            font-weight: 600;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-outline-danger:hover {
+            background: #dc3545;
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        
+        /* Small buttons */
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.85rem;
+        }
+        
+        .btn-lg {
+            padding: 14px 28px;
+            font-size: 1.1rem;
+        }
+
+        /* --- SIDEBARS (cleaned up) --- */
         hr {
             border-color: var(--theme-glow);
         }
 
-        /* --- DON JUAN SIDEBAR --- */
-        .don-juan-sidebar .sidebar-title {
-            font-family: var(--font-heading);
-            font-style: italic;
-            font-size: 1.5rem;
-            text-align: center;
-            color: var(--theme-primary);
-            margin-bottom: 2rem;
-            border-bottom: none;
-        }
-        .diary-card-container {
-            position: relative;
-            min-height: 250px;
-        }
-        .diary-card {
-            position: absolute;
-            width: 100%;
+        /* === NEW SIDEBAR STYLES === */
+        .sidebar-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
             padding: 20px;
-            background: var(--theme-bg);
-            border: 1px solid var(--theme-glow);
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            cursor: pointer;
-            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(93, 64, 55, 0.1);
+            margin-bottom: 1.5rem;
         }
-        .diary-card:nth-child(1) { top: 0; z-index: 3; transform: rotate(-2deg); }
-        .diary-card:nth-child(2) { top: 10px; transform: scale(0.95) rotate(1deg); z-index: 2; }
-        .diary-card:nth-child(3) { top: 20px; transform: scale(0.9) rotate(3deg); z-index: 1; }
-        .diary-card:nth-child(n+4) { display: none; } /* Show only 3 */
-
-        .diary-card-container:hover .diary-card {
-             transform: rotate(0) scale(1);
-             top: 0;
-        }
-        .diary-card-container:hover .diary-card:not(:hover) {
-            opacity: 0.5;
-            filter: blur(1px);
-        }
-        .diary-card:hover {
-            z-index: 4 !important;
-            transform: translateY(-10px) scale(1.05) !important;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .diary-card .diary-title {
+        
+        .sidebar-title {
             font-family: var(--font-heading);
-            font-style: italic;
             font-size: 1.1rem;
-            margin-bottom: 5px;
             color: var(--theme-text);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--theme-primary);
+            display: flex;
+            align-items: center;
         }
-        .diary-card .diary-meta {
+        
+        .sidebar-section {
+            margin-bottom: 8px;
+        }
+        
+        .sidebar-toggle {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--theme-text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-toggle:hover {
+            background: rgba(255, 182, 193, 0.15);
+            color: var(--theme-primary);
+        }
+        
+        .sidebar-toggle .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .sidebar-toggle[aria-expanded="true"] .toggle-icon {
+            transform: rotate(180deg);
+        }
+        
+        .sidebar-list {
+            list-style: none;
+            padding: 5px 0 10px 15px;
+            margin: 0;
+        }
+        
+        .sidebar-list li {
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        
+        .sidebar-list li:hover {
+            background: rgba(255, 182, 193, 0.1);
+        }
+        
+        .sidebar-list a {
+            color: var(--theme-text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+        
+        .sidebar-list a:hover {
+            color: var(--theme-primary);
+        }
+        
+        .sidebar-list .text-muted {
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        /* === RIGHT SIDEBAR - RECOMMENDED === */
+        .recommended-articles {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .recommended-card {
+            display: flex;
+            gap: 12px;
+            padding: 10px;
+            background: var(--theme-bg);
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .recommended-card:hover {
+            transform: translateX(5px);
+            border-color: var(--theme-primary);
+            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.2);
+        }
+        
+        .recommended-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .recommended-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .recommended-placeholder {
+            background: linear-gradient(135deg, var(--theme-primary), var(--theme-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .recommended-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .recommended-title {
+            font-family: var(--font-heading);
+            font-size: 0.95rem;
+            color: var(--theme-text);
+            margin: 0 0 5px 0;
+            line-height: 1.3;
+        }
+        
+        .recommended-meta {
             font-size: 0.8rem;
             color: var(--theme-text-muted);
+            margin: 0;
         }
-        .diary-card .diary-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            object-fit: cover;
-            position: absolute;
-            right: -15px;
-            top: -15px;
-            border: 2px solid #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            opacity: 0;
-            transform: translateY(10px) rotate(5deg);
-            transition: opacity 0.4s, transform 0.4s;
-            transition-delay: 0.1s;
+        
+        .empty-recommendations {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--theme-text-muted);
         }
-        .diary-card:hover .diary-image {
-            opacity: 1;
-            transform: translateY(0) rotate(0);
+        
+        .empty-recommendations i {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.5;
         }
+
+        /* === COMMENTS SECTION STYLES === */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(93, 64, 55, 0.1);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, rgba(255, 182, 193, 0.1), rgba(255, 179, 71, 0.1)) !important;
+            border-bottom: 1px solid var(--theme-glow);
+            border-radius: 12px 12px 0 0 !important;
+        }
+        
+        .comment {
+            border-left: 3px solid var(--theme-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .comment:hover {
+            border-left-color: var(--theme-secondary);
+            background: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        .mention {
+            border-left: 3px solid var(--theme-secondary);
+        }
+        
+        /* Form controls in comments */
+        .form-control:focus {
+            border-color: var(--theme-primary);
+            box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.25);
+        }
+        
         
         /* --- LOAD MORE BUTTON --- */
         #load-more {
@@ -500,40 +818,16 @@
         <div class="stars"></div>
         <div class="twinkling"></div>
         <div class="container footer-content">
-            <div class="footer-links">
-                <a href="#" class="orb-link" style="animation-delay: 0s;">
-                    <i class="bi bi-house-heart-fill"></i>
-                    <span class="link-label">Accueil</span>
-                </a>
-                <a href="#" class="orb-link" style="animation-delay: 1s;">
-                    <i class="bi bi-twitter"></i>
-                     <span class="link-label">Twitter</span>
-                </a>
-                <a href="#" class="orb-link" style="animation-delay: 2s;">
-                    <i class="bi bi-discord"></i>
-                     <span class="link-label">Discord</span>
-                </a>
-                <a href="#" class="orb-link" style="animation-delay: 3s;">
-                    <i class="bi bi-envelope-heart-fill"></i>
-                     <span class="link-label">Contact</span>
-                </a>
-            </div>
-            <div class="footer-cta">
-                <h4>Laissez une étoile dans notre jardin</h4>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="votre.email@example.com">
-                    <button type="submit">Envoyer</button>
-                </form>
-            </div>
             <div class="footer-copyright">
                 <p>&copy; {{ date('Y') }} ComVtuber. Un univers de créativité.</p>
             </div>
         </div>
     </footer>
 
-    <a href="#" id="back-to-top" title="Retour en haut">
-        &uarr;
-    </a>
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top-btn" title="Retour en haut">
+        <i class="bi bi-arrow-up"></i>
+    </button>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -541,18 +835,24 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Back to top button
-            let mybutton = document.getElementById("back-to-top");
-            if(mybutton) {
-                window.onscroll = function() {
-                    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-                        mybutton.style.display = "block";
+            const backToTopBtn = document.getElementById("back-to-top");
+            if(backToTopBtn) {
+                // Show/hide button on scroll
+                window.addEventListener('scroll', function() {
+                    if (window.pageYOffset > 300) {
+                        backToTopBtn.classList.add('show');
                     } else {
-                        mybutton.style.display = "none";
+                        backToTopBtn.classList.remove('show');
                     }
-                };
-                mybutton.addEventListener('click', function(e) {
+                });
+                
+                // Smooth scroll to top on click
+                backToTopBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 });
             }
 

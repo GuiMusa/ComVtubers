@@ -8,9 +8,10 @@
     <!-- Contenu principal -->
     <main class="col-md-6">
         <!-- Bouton retour -->
-        <div class="mb-3">
-            <a href="{{ route('home') }}" class="btn btn-outline-secondary">
-                <i class="bi bi-arrow-left"></i> Retour aux articles
+        <div class="mb-4">
+            <a href="{{ route('home') }}" class="btn-back">
+                <i class="bi bi-arrow-left me-2"></i>
+                <span>Retour aux articles</span>
             </a>
         </div>
 
@@ -23,18 +24,20 @@
             <div class="card-body">
                 <h1 class="card-title">{{ $article->titre }}</h1>
                 
-                <div class="d-flex justify-content-end mb-3">
+                <div class="d-flex justify-content-end gap-2 mb-3">
                     @can('update', $article)
-                        <a href="{{ route('articles.edit', $article) }}" class="btn btn-sm btn-outline-primary me-2">
-                            <i class="bi bi-pencil"></i> Modifier l'article
+                        <a href="{{ route('articles.edit', $article) }}" class="btn-edit-article">
+                            <i class="bi bi-pencil me-2"></i>
+                            <span>Modifier</span>
                         </a>
                     @endcan
                     @can('delete', $article)
                         <form action="{{ route('articles.destroy', $article) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">
-                                <i class="bi bi-trash"></i> Supprimer l'article
+                            <button type="submit" class="btn-delete-article" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">
+                                <i class="bi bi-trash me-2"></i>
+                                <span>Supprimer</span>
                             </button>
                         </form>
                     @endcan

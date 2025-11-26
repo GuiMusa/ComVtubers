@@ -37,6 +37,9 @@
     </section>
     
     <footer class="pt-4 mt-4 border-top">
-        <a href="{{ route('articles.show', $article) }}" class="btn btn-primary btn-sm">Lire la suite</a>
+        <a href="{{ route('articles.show', $article) }}" class="btn-read-more">
+            <span>Lire la suite</span>
+            <i class="bi bi-arrow-right ms-2"></i>
+        </a>
     </footer>
 </article>

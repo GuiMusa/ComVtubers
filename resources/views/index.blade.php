@@ -8,7 +8,7 @@
     <main class="col-md-6 article-main-content">
         @auth
             <div class="mb-4 text-center">
-                <a href="{{ route('articles.create') }}" class="btn btn-primary btn-lg">
+                <a href="{{ route('articles.create') }}" class="btn btn-primary btn-lg px-5 py-3 shadow">
                     <i class="bi bi-plus-circle me-2"></i> Créer un article
                 </a>
             </div>

@@ -1,66 +1,70 @@
 <aside class="col-md-3">
-    <div class="sidebar-block">
-        <h3 class="fs-5 mb-3">Articles récemment visité</h3>
-        <ul class="nav flex-column nav-pills">
-            <li class="nav-item">
-                {{-- Utilisation de d-flex pour aligner le texte et la flèche --}}
-                <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#mesArticlesCollapse" role="button" aria-expanded="false" aria-controls="mesArticlesCollapse">
-                    <span>Mes articles</span>
-                    {{-- La flèche qui va pivoter --}}
-                    <span class="arrow-indicator"></span>
-                </a>
-                <div class="collapse" id="mesArticlesCollapse">
-                    <ul class="nav flex-column ps-3">
-                        @auth
-                            @forelse($userArticles as $article)
-                                <li class="nav-item"><a class="nav-link py-1" href="#">{{ $article->titre }}</a></li>
-                            @empty
-                                <li class="nav-item"><span class="nav-link text-muted py-1">Aucun article</span></li>
-                            @endforelse
-                        @else
-                            <li class="nav-item"><span class="nav-link text-muted py-1">Connectez-vous pour voir vos articles</span></li>
-                        @endauth
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#favorisCollapse" role="button" aria-expanded="false" aria-controls="favorisCollapse">
-                    <span>Articles Favoris</span>
-                    <span class="arrow-indicator"></span>
-                </a>
-                <div class="collapse" id="favorisCollapse">
-                    <ul class="nav flex-column ps-3">
-                        @auth
-                            @forelse($favoriteArticles as $article)
-                                <li class="nav-item"><a class="nav-link py-1" href="#">{{ $article->titre }}</a></li>
-                            @empty
-                                <li class="nav-item"><span class="nav-link text-muted py-1">Aucun favori</span></li>
-                            @endforelse
-                        @else
-                            <li class="nav-item"><span class="nav-link text-muted py-1">Connectez-vous pour voir vos favoris</span></li>
-                        @endauth
-                    </ul>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#derniersVusCollapse" role="button" aria-expanded="false" aria-controls="derniersVusCollapse">
-                    <span>Derniers vus</span>
-                    <span class="arrow-indicator"></span>
-                </a>
-                <div class="collapse" id="derniersVusCollapse">
-                    <ul class="nav flex-column ps-3">
-                        @auth
-                            @forelse($lastViewedArticles as $article)
-                                <li class="nav-item"><a class="nav-link py-1" href="{{ route('articles.show', $article) }}">{{ $article->titre }}</a></li>
-                            @empty
-                                <li class="nav-item"><span class="nav-link text-muted py-1">Aucun article récemment vu</span></li>
-                            @endforelse
-                        @else
-                            <li class="nav-item"><span class="nav-link text-muted py-1">Connectez-vous pour voir votre historique</span></li>
-                        @endauth
-                    </ul>
-                </div>
-            </li>
-        </ul>
+    <div class="sidebar-card">
+        <h3 class="sidebar-title">
+            <i class="bi bi-journal-text me-2"></i>Navigation
+        </h3>
+        
+        <!-- Mes articles -->
+        <div class="sidebar-section">
+            <button class="sidebar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mesArticlesCollapse" aria-expanded="false">
+                <span><i class="bi bi-file-earmark-text me-2"></i>Mes articles</span>
+                <i class="bi bi-chevron-down toggle-icon"></i>
+            </button>
+            <div class="collapse" id="mesArticlesCollapse">
+                <ul class="sidebar-list">
+                    @auth
+                        @forelse($userArticles as $article)
+                            <li><a href="{{ route('articles.show', $article) }}">{{ Str::limit($article->titre, 30) }}</a></li>
+                        @empty
+                            <li class="text-muted">Aucun article</li>
+                        @endforelse
+                    @else
+                        <li class="text-muted">Connectez-vous pour voir vos articles</li>
+                    @endauth
+                </ul>
+            </div>
+        </div>
+
+        <!-- Articles Favoris -->
+        <div class="sidebar-section">
+            <button class="sidebar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#favorisCollapse" aria-expanded="false">
+                <span><i class="bi bi-heart me-2"></i>Articles Favoris</span>
+                <i class="bi bi-chevron-down toggle-icon"></i>
+            </button>
+            <div class="collapse" id="favorisCollapse">
+                <ul class="sidebar-list">
+                    @auth
+                        @forelse($favoriteArticles as $article)
+                            <li><a href="{{ route('articles.show', $article) }}">{{ Str::limit($article->titre, 30) }}</a></li>
+                        @empty
+                            <li class="text-muted">Aucun favori</li>
+                        @endforelse
+                    @else
+                        <li class="text-muted">Connectez-vous pour voir vos favoris</li>
+                    @endauth
+                </ul>
+            </div>
+        </div>
+
+        <!-- Derniers vus -->
+        <div class="sidebar-section">
+            <button class="sidebar-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#derniersVusCollapse" aria-expanded="false">
+                <span><i class="bi bi-clock-history me-2"></i>Derniers vus</span>
+                <i class="bi bi-chevron-down toggle-icon"></i>
+            </button>
+            <div class="collapse" id="derniersVusCollapse">
+                <ul class="sidebar-list">
+                    @auth
+                        @forelse($lastViewedArticles as $article)
+                            <li><a href="{{ route('articles.show', $article) }}">{{ Str::limit($article->titre, 30) }}</a></li>
+                        @empty
+                            <li class="text-muted">Aucun article récemment vu</li>
+                        @endforelse
+                    @else
+                        <li class="text-muted">Connectez-vous pour voir votre historique</li>
+                    @endauth
+                </ul>
+            </div>
+        </div>
     </div>
 </aside>

@@ -1,21 +1,33 @@
-<!-- Barre latérale droite - Don Juan -->
+<!-- Barre latérale droite -->
 <aside class="col-md-3">
-    <div class="sidebar-block don-juan-sidebar">
-        <h3 class="sidebar-title">Mes Confidences</h3>
-        <div class="diary-card-container">
+    <div class="sidebar-card">
+        <h3 class="sidebar-title">
+            <i class="bi bi-stars me-2"></i>Articles Recommandés
+        </h3>
+        
+        <div class="recommended-articles">
             @forelse($recommendedArticles as $article)
-                <a href="{{ route('articles.show', $article) }}" class="diary-card">
+                <a href="{{ route('articles.show', $article) }}" class="recommended-card">
                     @if($article->image)
-                        <img src="{{ $article->image }}" class="diary-image" alt="">
+                        <div class="recommended-image">
+                            <img src="{{ $article->image }}" alt="{{ $article->titre }}">
+                        </div>
+                    @else
+                        <div class="recommended-image recommended-placeholder">
+                            <i class="bi bi-image"></i>
+                        </div>
                     @endif
-                    <h4 class="diary-title">{{ $article->titre }}</h4>
-                    <p class="diary-meta">
-                        Par {{ $article->user->name ?? 'un secret' }}
-                    </p>
+                    <div class="recommended-content">
+                        <h4 class="recommended-title">{{ Str::limit($article->titre, 40) }}</h4>
+                        <p class="recommended-meta">
+                            <i class="bi bi-person-circle me-1"></i>{{ $article->user->name ?? 'Anonyme' }}
+                        </p>
+                    </div>
                 </a>
             @empty
-                <div class="text-center text-muted">
-                    Aucun secret à partager pour le moment.
+                <div class="empty-recommendations">
+                    <i class="bi bi-journal-x"></i>
+                    <p>Aucun article recommandé pour le moment.</p>
                 </div>
             @endforelse
         </div>
