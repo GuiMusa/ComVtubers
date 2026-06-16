@@ -49,6 +49,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Scope pour ne récupérer que les utilisateurs actifs.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('statue', 'actif')->orWhere('statue', 'modérateur');
+    }
+
+    /**
      * Obtenir tous les articles de l'utilisateur.
      */
     public function articles()

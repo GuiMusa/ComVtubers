@@ -24,18 +24,21 @@ class SidebarComposer
             $userId = Auth::id();
 
             // Récupérer les articles de l'utilisateur connecté
-            // avec le statut 'publié' ou 'brouillon'
-            $userArticles = Article::with('user', 'categories')
+            // Seulement les publiés si c'est pour l'affichage (sauf si on est sur son dashboard)
+            // Ici le sidebar montre les articles récents de l'utilisateur
+            $userArticles = Article::with('user', 'categorie')
                                    ->where('user_id', $userId)
-                                   ->whereIn('statue', ['publié', 'brouillon'])
+                                   ->where('statue', 'publié') // On cache les brouillons
                                    ->orderBy('date', 'desc')
-                                   ->take(10) // Ajout pour limiter à 10 articles
+                                   ->take(10)
                                    ->get(); 
 
             // Récupérer les 10 derniers articles favoris de l'utilisateur
-            $favoriteArticles = Article::with('user', 'categories')
+            // Uniquement si l'article est publié (pas brouillon)
+            $favoriteArticles = Article::with('user', 'categorie')
                                        ->where('user_id', $userId)
                                        ->where('favoris', true)
+                                       ->where('statue', 'publié')
                                        ->orderBy('date', 'desc')
                                        ->take(10)
                                        ->get();

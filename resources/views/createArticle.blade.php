@@ -51,7 +51,7 @@
                     <input class="form-control" type="file" id="media" name="media" accept="image/*,video/*">
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Créer l'article</button>
+                <button type="submit" class="btn btn-primary w-100">Poster l'article</button>
             </form>
         </div>
     </main>

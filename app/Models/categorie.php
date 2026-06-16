@@ -25,7 +25,6 @@ class Categorie extends Model
         'date',
         'nom',
         'carte_id',
-        'article_id',
     ];
 
     /**
@@ -46,10 +45,10 @@ class Categorie extends Model
     }
 
     /**
-     * Obtenir l'article auquel la catégorie appartient.
+     * Obtenir les articles associés à cette catégorie.
      */
-    public function article()
+    public function articles()
     {
-        return $this->belongsTo(Article::class, 'article_id');
+        return $this->hasMany(Article::class, 'categorie_id');
     }
 }

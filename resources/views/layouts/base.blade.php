@@ -55,7 +55,27 @@ a[aria-expanded="true"] .arrow-indicator {
                     <li class="nav-item"><a href="#" class="nav-link">Articles</a></li>
                     <li class="nav-item"><a href="#" class="nav-link">Vtubers</a></li>
                 </ul>
-                <a href="{{ route('login') }}" class="btn btn-primary">Connexion</a>
+
+                @auth
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ Auth::user()->name }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                            <li><a class="dropdown-item" href="{{ route('dashboard') }}">Tableau de bord</a></li>
+                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Mon Profil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">Déconnexion</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-primary">Connexion</a>
+                @endauth
             </div>
         </div>
     </header>

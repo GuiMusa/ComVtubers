@@ -7,9 +7,18 @@
 
     <!-- Contenu principal -->
     <main class="col-md-6">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h1 class="mb-0">Les articles récents</h1>
-            <a href="{{ route('articles.create') }}" class="btn btn-primary">Créer un article</a>
+            @auth
+                <a href="{{ route('articles.create') }}" class="btn btn-primary">Créer un article</a>
+            @endauth
         </div>
         
         <!-- Contrôle de pagination en haut -->
@@ -36,11 +45,9 @@
                                 </small>
                             </p>
     
-                            @if($article->categories->isNotEmpty())
+                            @if($article->categorie)
                                 <div class="mb-2">
-                                    @foreach($article->categories as $categorie)
-                                        <span class="badge bg-secondary">{{ $categorie->nom }}</span>
-                                    @endforeach
+                                    <span class="badge bg-secondary">{{ $article->categorie->nom }}</span>
                                 </div>
                             @endif
     

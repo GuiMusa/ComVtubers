@@ -19,11 +19,9 @@
                             @endif
                         </small>
                     </p>
-                    @if($article->categories->isNotEmpty())
+                    @if($article->categorie)
                         <div class="mb-2">
-                            @foreach($article->categories as $categorie)
-                                <span class="badge bg-secondary">{{ $categorie->nom }}</span>
-                            @endforeach
+                            <span class="badge bg-secondary">{{ $article->categorie->nom }}</span>
                         </div>
                     @endif
                     @if($loop->last)

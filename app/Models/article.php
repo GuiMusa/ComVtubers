@@ -24,11 +24,13 @@ class Article extends Model
     protected $fillable = [
         'date',
         'titre',
-        'image',
+        'contenu',
+        'media',
         'statue',
         'favoris',
         'user_id',
         'liste_id',
+        'categorie_id',
     ];
 
     /**
@@ -42,11 +44,30 @@ class Article extends Model
     ];
 
     /**
+     * Scope pour ne récupérer que les articles publiés d'utilisateurs non bannis.
+     */
+    public function scopeVisible($query)
+    {
+        return $query->where('statue', 'publié')
+                     ->whereHas('user', function ($q) {
+                         $q->whereIn('statue', ['actif', 'modérateur']);
+                     });
+    }
+
+    /**
      * Obtenir l'utilisateur qui a créé l'article.
      */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Obtenir la catégorie de l'article.
+     */
+    public function categorie()
+    {
+        return $this->belongsTo(Categorie::class, 'categorie_id');
     }
 
     /**
@@ -63,13 +84,5 @@ class Article extends Model
     public function commentaires()
     {
         return $this->hasMany(Commentaire::class, 'article_id');
-    }
-
-    /**
-     * Obtenir les catégories associées à l'article.
-     */
-    public function categories()
-    {
-        return $this->hasMany(Categorie::class, 'article_id');
     }
 }
