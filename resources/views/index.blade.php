@@ -30,12 +30,30 @@
         <div class="row">
             @forelse($articles as $article)
                 <div class="col-md-6 mb-4">
-                    <div class="card">
-                        @if($article->image)
-                            <img src="{{ $article->image }}" class="card-img-top" alt="Image pour {{ $article->titre }}">
+                    <div class="card h-100 shadow-sm border-0">
+                        @if($article->media)
+                            <a href="{{ route('articles.show', $article->id) }}">
+                                @php
+                                    $extension = pathinfo($article->media, PATHINFO_EXTENSION);
+                                    $is_video = in_array(strtolower($extension), ['mp4', 'mov', 'avi']);
+                                @endphp
+                                @if($is_video)
+                                    <div class="ratio ratio-16x9">
+                                        <video class="card-img-top object-fit-cover rounded-top">
+                                            <source src="{{ asset('storage/' . $article->media) }}">
+                                        </video>
+                                    </div>
+                                @else
+                                    <img src="{{ asset('storage/' . $article->media) }}" class="card-img-top" alt="Image pour {{ $article->titre }}">
+                                @endif
+                            </a>
                         @endif
                         <div class="card-body">
-                            <h5 class="card-title">{{ $article->titre }}</h5>
+                            <h5 class="card-title">
+                                <a href="{{ route('articles.show', $article->id) }}" class="text-decoration-none text-dark fw-bold">
+                                    {{ $article->titre }}
+                                </a>
+                            </h5>
                             <p class="card-text">
                                 <small class="text-muted">
                                     Publié le {{ \Carbon\Carbon::parse($article->date)->format('d/m/Y à H:i') }}

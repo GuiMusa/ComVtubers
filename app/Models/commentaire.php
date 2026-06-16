@@ -27,6 +27,7 @@ class Commentaire extends Model
         'image',
         'user_id',
         'article_id',
+        'parent_id',
     ];
 
     /**
@@ -52,6 +53,22 @@ class Commentaire extends Model
     public function article()
     {
         return $this->belongsTo(Article::class, 'article_id');
+    }
+
+    /**
+     * Obtenir le commentaire parent (si c'est une réponse).
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Commentaire::class, 'parent_id');
+    }
+
+    /**
+     * Obtenir les réponses à ce commentaire.
+     */
+    public function reponses()
+    {
+        return $this->hasMany(Commentaire::class, 'parent_id')->orderBy('date', 'asc');
     }
 
     /**

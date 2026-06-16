@@ -7,18 +7,25 @@ use Illuminate\Support\Facades\DB;
 
 class testSeeder extends Seeder
 {
+    /**
+     * Exécute le remplissage de la base de données.
+     */
     public function run(): void
     {
-        // 1. Créer les entités sans dépendances externes
-        // On crée 10 utilisateurs, principalement actifs, quelques bannis
+        // 1. CRÉATION DES UTILISATEURS
+        // On crée 10 utilisateurs aléatoires via la Factory.
+        // On définit aléatoirement leur statut : principalement 'actif', avec quelques 'banni' pour tester les filtres.
         $users = \App\Models\User::factory(10)->create([
             'statue' => fn() => fake()->randomElement(['actif', 'actif', 'actif', 'banni']) 
         ]);
 
-        $listes = \App\Models\Liste::factory(5)->create(); // Réduit pour plus de clarté
+        // 2. CRÉATION DES DÉPENDANCES (Cartes et Listes)
+        // Requis par la structure de la base de données pour lier les futurs articles.
+        $listes = \App\Models\Liste::factory(5)->create();
         $cartes = \App\Models\Carte::factory(10)->create();
 
-        // 2. Créer les catégories fixes (Les 11 catégories uniques)
+        // 3. CRÉATION DES CATÉGORIES (Fixes)
+        // On crée exactement les 11 catégories thématiques du forum.
         $nomsCategories = [
             'Hololive', 'VShojo', 'Indépendants', 'Nijisanji', 
             'Musicaux', 'Gaming', 'ASMR', 'Chat', 'Collab', 
@@ -30,23 +37,26 @@ class testSeeder extends Seeder
             $categories->push(\App\Models\Categorie::create([
                 'nom' => $nom,
                 'date' => now(),
-                'carte_id' => $cartes->random()->id,
+                'carte_id' => $cartes->random()->id, // On lie chaque catégorie à une carte au hasard
             ]));
         }
 
-        // 3. Créer les articles en utilisant les utilisateurs, listes et catégories créés
+        // 4. CRÉATION DES ARTICLES
+        // On crée 50 articles de test en les liant aux utilisateurs, listes et catégories créés plus haut.
         $articles = \App\Models\Article::factory(50)->create([
             'user_id' => fn() => $users->random()->id,
             'liste_id' => fn() => $listes->random()->id,
             'categorie_id' => fn() => $categories->random()->id,
-            'statue' => fn() => fake()->randomElement(['publié', 'publié', 'publié', 'brouillon']),
-            'favoris' => false, // Par défaut pas en favoris
+            'statue' => fn() => fake()->randomElement(['publié', 'publié', 'publié', 'brouillon']), // Certains articles restent en brouillon
+            'favoris' => false, // Jamais en favoris par défaut
         ]);
 
-        // 4. Créer les commentaires en utilisant les utilisateurs et articles créés
+        // 5. CRÉATION DES COMMENTAIRES
+        // On génère 100 commentaires aléatoires sur les articles existants.
         $commentaires = \App\Models\Commentaire::factory(100)->recycle($users)->recycle($articles)->create();
 
-        // 5. Créer les mentions en utilisant les commentaires créés
+        // 6. CRÉATION DES MENTIONS
+        // On simule 30 mentions dans les commentaires.
         \App\Models\Mention::factory(30)
             ->recycle($commentaires)
             ->create();

@@ -13,7 +13,7 @@
                     <ul class="nav flex-column ps-3">
                         @auth
                             @forelse($userArticles as $article)
-                                <li class="nav-item"><a class="nav-link text-secondary py-1" href="#">{{ $article->titre }}</a></li>
+                                <li class="nav-item"><a class="nav-link text-secondary py-1" href="{{ route('articles.show', $article->id) }}">{{ $article->titre }}</a></li>
                             @empty
                                 <li class="nav-item"><span class="nav-link text-muted py-1">Aucun article</span></li>
                             @endforelse
@@ -32,7 +32,7 @@
                     <ul class="nav flex-column ps-3">
                         @auth
                             @forelse($favoriteArticles as $article)
-                                <li class="nav-item"><a class="nav-link text-secondary py-1" href="#">{{ $article->titre }}</a></li>
+                                <li class="nav-item"><a class="nav-link text-secondary py-1" href="{{ route('articles.show', $article->id) }}">{{ $article->titre }}</a></li>
                             @empty
                                 <li class="nav-item"><span class="nav-link text-muted py-1">Aucun favori</span></li>
                             @endforelse
@@ -51,7 +51,7 @@
                     <ul class="nav flex-column ps-3">
                         @auth
                             @forelse($lastViewedArticles as $article)
-                                <li class="nav-item"><a class="nav-link text-secondary py-1" href="#">{{ $article->titre }}</a></li>
+                                <li class="nav-item"><a class="nav-link text-secondary py-1" href="{{ route('articles.show', $article->id) }}">{{ $article->titre }}</a></li>
                             @empty
                                 <li class="nav-item"><span class="nav-link text-muted py-1">Aucun article récemment vu</span></li>
                             @endforelse

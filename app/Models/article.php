@@ -11,15 +11,11 @@ class Article extends Model
 
     /**
      * La table associée au modèle.
-     *
-     * @var string
      */
     protected $table = 'articles';
 
     /**
      * Les attributs qui peuvent être assignés en masse.
-     *
-     * @var array<int, string>
      */
     protected $fillable = [
         'date',
@@ -35,8 +31,6 @@ class Article extends Model
 
     /**
      * Les attributs qui doivent être convertis vers des types natifs.
-     *
-     * @var array<string, string>
      */
     protected $casts = [
         'favoris' => 'boolean',
@@ -44,7 +38,9 @@ class Article extends Model
     ];
 
     /**
-     * Scope pour ne récupérer que les articles publiés d'utilisateurs non bannis.
+     * Scope pour ne récupérer que les articles "visibles" :
+     * - Doivent être au statut 'publié'
+     * - L'auteur ne doit pas être banni (doit être 'actif' ou 'modérateur')
      */
     public function scopeVisible($query)
     {
@@ -55,7 +51,7 @@ class Article extends Model
     }
 
     /**
-     * Obtenir l'utilisateur qui a créé l'article.
+     * Relation : Un article appartient à un utilisateur (Auteur).
      */
     public function user()
     {
@@ -63,7 +59,7 @@ class Article extends Model
     }
 
     /**
-     * Obtenir la catégorie de l'article.
+     * Relation : Un article appartient à une catégorie unique.
      */
     public function categorie()
     {
@@ -71,7 +67,7 @@ class Article extends Model
     }
 
     /**
-     * Obtenir la liste à laquelle l'article appartient.
+     * Relation : Un article appartient à une liste (non utilisé pour le moment).
      */
     public function liste()
     {
@@ -79,7 +75,7 @@ class Article extends Model
     }
 
     /**
-     * Obtenir les commentaires de l'article.
+     * Relation : Un article peut avoir plusieurs commentaires.
      */
     public function commentaires()
     {
