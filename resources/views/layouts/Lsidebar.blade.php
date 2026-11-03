@@ -1,57 +1,58 @@
-<aside class="col-md-3">
-    <div class="bg-white rounded-3 shadow-sm p-3">
-        <h3 class="fs-5 mb-3">Articles récemment visité</h3>
-        <ul class="nav flex-column nav-pills">
+<aside class="lg:col-span-3 order-2 lg:order-1">
+    <div class="bg-white rounded-xl shadow-sm p-4">
+        <h3 class="text-lg font-semibold mb-3">Articles récemment visité</h3>
+        <ul class="space-y-1">
 
-            {{-- ============================================ --}}
-            {{-- BLOC 1 : MES ARTICLES --}}
-            {{-- ============================================ --}}
-            <li class="nav-item">
-                <a class="nav-link text-dark d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#mesArticlesCollapse" role="button" aria-expanded="false" aria-controls="mesArticlesCollapse">
+            {{-- MES ARTICLES --}}
+            <li x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="w-full flex justify-between items-center px-3 py-2 rounded-lg text-gray-900 hover:bg-gray-50 transition">
                     <span>Mes articles</span>
-                    <span class="arrow-indicator"></span>
-                </a>
-                <div class="collapse" id="mesArticlesCollapse">
-                    <ul class="nav flex-column ps-3">
-                        @auth
-                            @forelse($userArticles as $article)
-                                <li class="nav-item">
-                                    <a class="nav-link text-secondary py-1" href="{{ route('articles.show', $article->id) }}">
-                                        {{ $article->titre }}
-                                    </a>
-                                </li>
-                            @empty
-                                <li class="nav-item"><span class="nav-link text-muted py-1">Aucun article</span></li>
-                            @endforelse
-                        @else
-                            <li class="nav-item"><span class="nav-link text-muted py-1">Connectez-vous pour voir vos articles</span></li>
-                        @endauth
-                    </ul>
-                </div>
-            </li>
-
-            {{-- ============================================ --}}
-            {{-- BLOC 2 : DERNIERS VUS --}}
-            {{-- (affiche les derniers articles publiés du site) --}}
-            {{-- ============================================ --}}
-            <li class="nav-item">
-                <a class="nav-link text-dark d-flex justify-content-between align-items-center" data-bs-toggle="collapse" href="#derniersVusCollapse" role="button" aria-expanded="false" aria-controls="derniersVusCollapse">
-                    <span>Derniers vus</span>
-                    <span class="arrow-indicator"></span>
-                </a>
-                <div class="collapse" id="derniersVusCollapse">
-                    <ul class="nav flex-column ps-3">
-                        @forelse($latestArticles as $article)
-                            <li class="nav-item">
-                                <a class="nav-link text-secondary py-1" href="{{ route('articles.show', $article->id) }}">
+                    <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-90': open}"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <ul x-show="open" x-cloak x-collapse class="pl-4 mt-1 space-y-1">
+                    @auth
+                        @forelse($userArticles as $article)
+                            <li>
+                                <a href="{{ route('articles.show', $article->id) }}"
+                                   class="block px-3 py-1 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg truncate">
                                     {{ $article->titre }}
                                 </a>
                             </li>
                         @empty
-                            <li class="nav-item"><span class="nav-link text-muted py-1">Aucun article pour le moment</span></li>
+                            <li class="px-3 py-1 text-sm text-gray-400">Aucun article</li>
                         @endforelse
-                    </ul>
-                </div>
+                    @else
+                        <li class="px-3 py-1 text-sm text-gray-400">Connectez-vous pour voir vos articles</li>
+                    @endauth
+                </ul>
+            </li>
+
+            {{-- DERNIERS VUS --}}
+            <li x-data="{ open: false }">
+                <button @click="open = !open"
+                        class="w-full flex justify-between items-center px-3 py-2 rounded-lg text-gray-900 hover:bg-gray-50 transition">
+                    <span>Derniers vus</span>
+                    <svg class="w-4 h-4 transition-transform duration-200" :class="{'rotate-90': open}"
+                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <ul x-show="open" x-cloak x-collapse class="pl-4 mt-1 space-y-1">
+                    @forelse($latestArticles as $article)
+                        <li>
+                            <a href="{{ route('articles.show', $article->id) }}"
+                               class="block px-3 py-1 text-sm text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg truncate">
+                                {{ $article->titre }}
+                            </a>
+                        </li>
+                    @empty
+                        <li class="px-3 py-1 text-sm text-gray-400">Aucun article pour le moment</li>
+                    @endforelse
+                </ul>
             </li>
 
         </ul>

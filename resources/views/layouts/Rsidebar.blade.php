@@ -1,55 +1,27 @@
-<!-- Barre latérale droite -->
-<aside class="col-md-3">
-    <div class="card">
-        <div class="card-header">
-            Articles Recommandés
-        </div>
-        <div class="card-body">
+<aside class="lg:col-span-3 order-3 lg:order-3">
+    <div class="bg-white rounded-xl shadow-sm p-4">
+        <h3 class="text-lg font-semibold mb-3">Articles recommandés</h3>
+        <ul class="space-y-3">
             @forelse($recommendedArticles as $article)
-                <div class="mb-3">
+                <li class="border-b border-gray-100 pb-3 last:border-0 last:pb-0">
                     @if($article->media)
-                        <a href="{{ route('articles.show', $article->id) }}">
-                            @php
-                                $extension = pathinfo($article->media, PATHINFO_EXTENSION);
-                                $is_video = in_array(strtolower($extension), ['mp4', 'mov', 'avi']);
-                            @endphp
-                            @if($is_video)
-                                <video class="img-fluid rounded mb-2 w-100">
-                                    <source src="{{ asset('storage/' . $article->media) }}">
-                                </video>
-                            @else
-                                <img src="{{ asset('storage/' . $article->media) }}" class="img-fluid rounded mb-2" alt="Image pour {{ $article->titre }}">
-                            @endif
+                        <a href="{{ route('articles.show', $article->id) }}" class="block mb-2">
+                            <img src="{{ asset('storage/' . $article->media) }}"
+                                 alt="{{ $article->titre }}"
+                                 class="w-full h-32 object-cover rounded-lg">
                         </a>
                     @endif
-                    <h6 class="card-title mb-1">
-                        <a href="{{ route('articles.show', $article->id) }}" class="text-decoration-none text-dark">
-                            {{ $article->titre }}
-                        </a>
-                    </h6>
-                    <p class="card-text">
-                        <small class="text-muted">
-                            Publié le {{ \Carbon\Carbon::parse($article->date)->format('d/m/Y') }}
-                            @if($article->user)
-                                par <strong>{{ $article->user->name }}</strong>
-                            @endif
-                        </small>
+                    <a href="{{ route('articles.show', $article->id) }}"
+                       class="block text-sm font-medium text-blue-600 hover:underline leading-snug">
+                        {{ $article->titre }}
+                    </a>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Publié le {{ \Carbon\Carbon::parse($article->date)->format('d/m/Y') }}
                     </p>
-                    @if($article->categorie)
-                        <div class="mb-2">
-                            <span class="badge bg-secondary">{{ $article->categorie->nom }}</span>
-                        </div>
-                    @endif
-                    @if($loop->last)
-                    @else
-                        <hr>
-                    @endif
-                </div>
+                </li>
             @empty
-                <div class="alert alert-info">
-                    Aucun article à recommander.
-                </div>
+                <li class="text-sm text-gray-400">Aucune recommandation</li>
             @endforelse
-        </div>
+        </ul>
     </div>
 </aside>
