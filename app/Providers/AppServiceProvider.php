@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Http\view\composer\SidebarComposer;
+use App\View\Composers\SidebarComposer; 
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 

@@ -50,26 +50,32 @@ class ArticleController extends Controller
      * Affiche un article spécifique avec ses commentaires.
      */
     public function show(Article $article)
-    {
-        // Sécurité : On vérifie que l'article est visible. 
-        // S'il est caché/banni, seul l'auteur peut encore y accéder.
-        if ($article->statue !== 'publié' || ($article->user && $article->user->statue === 'banni')) {
-            if (auth()->id() !== $article->user_id) {
-                abort(404, "Cet article n'est pas disponible.");
-            }
+{
+    // Sécurité (ton code actuel reste pareil)
+    if ($article->statue !== 'publié' || ($article->user && $article->user->statue === 'banni')) {
+        if (auth()->id() !== $article->user_id) {
+            abort(404, "Cet article n'est pas disponible.");
         }
-
-        $article->load(['user', 'categorie', 'commentaires.user']);
-
-        $recommendedArticles = Article::visible()
-                                      ->where('id', '!=', $article->id)
-                                      ->with('user', 'categorie')
-                                      ->inRandomOrder()
-                                      ->take(5)
-                                      ->get();
-
-        return view('showArticle', compact('article', 'recommendedArticles'));
     }
+
+    // ✅ AJOUT : Tracking des articles vus
+    $viewed = session()->get('viewed_articles', []);           // Récupère la liste actuelle
+    $viewed = array_filter($viewed, fn($id) => $id != $article->id); // Retire l'article s'il y est déjà
+    array_unshift($viewed, $article->id);                      // Ajoute l'article en tête de liste
+    $viewed = array_slice($viewed, 0, 5);                      // Limite à 5 articles max
+    session()->put('viewed_articles', $viewed);                // Sauvegarde en session
+
+    $article->load(['user', 'categorie', 'commentaires.user']);
+
+    $recommendedArticles = Article::visible()
+                                  ->where('id', '!=', $article->id)
+                                  ->with('user', 'categorie')
+                                  ->inRandomOrder()
+                                  ->take(5)
+                                  ->get();
+
+    return view('showArticle', compact('article', 'recommendedArticles'));
+}
 
     /**
      * Enregistre un nouvel article.
