@@ -12,12 +12,16 @@ class ArticleController extends Controller
     /**
      * Affiche la page d'accueil avec les articles récents et recommandés.
      */
-    public function index()
+    public function index(Request $request)
     {
+        // Champ de recherche
+         $q = $request->input('q');
         // On récupère les articles récents (publiés et d'utilisateurs non bannis)
         $articles = Article::visible()
                            ->with('user', 'categorie')
-                           ->orderBy('date', 'desc')
+                                    ->when($q, fn($query) => $query->where('titre','like',"%$q%")
+                                    ->orWhere('contenu','like',"%$q%"))
+                                    ->orderBy('date', 'desc')
                            ->paginate(10);
 
         // On récupère 5 articles au hasard pour les recommandations
@@ -43,7 +47,7 @@ class ArticleController extends Controller
                                       ->take(5)
                                       ->get();
 
-        return view('createArticle', compact('recommendedArticles', 'categories'));
+        return view('articles.createArticle', compact('recommendedArticles', 'categories'));
     }
 
     /**
@@ -74,7 +78,7 @@ class ArticleController extends Controller
                                   ->take(5)
                                   ->get();
 
-    return view('showArticle', compact('article', 'recommendedArticles'));
+    return view('articles.showArticle', compact('article', 'recommendedArticles'));
 }
 
     /**
@@ -105,7 +109,7 @@ class ArticleController extends Controller
         $article->date = now();
         $article->statue = 'publié';
         $article->user_id = auth()->id();
-        $article->liste_id = 1; 
+        // $article->liste_id = 1; 
         $article->categorie_id = $validatedData['categorie_id'];
         $article->save();
 
@@ -132,7 +136,7 @@ class ArticleController extends Controller
                                       ->take(5)
                                       ->get();
 
-        return view('editArticle', compact('article', 'categories', 'recommendedArticles'));
+        return view('articles.editArticle', compact('article', 'categories', 'recommendedArticles'));
     }
 
     /**

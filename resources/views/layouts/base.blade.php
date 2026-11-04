@@ -14,33 +14,40 @@
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
 
-    {{-- ============================================ --}}
+        {{-- ============================================ --}}
     {{-- HEADER --}}
     {{-- ============================================ --}}
     <header class="bg-white shadow-sm sticky top-0 z-40" x-data="{ mobileMenu: false, userMenu: false }">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex items-center justify-between h-16 gap-4">
 
-                {{-- Logo --}}
+                {{-- 1. Logo (Toujours visible) --}}
                 <a href="{{ route('home') }}" class="text-xl font-bold text-gray-900 shrink-0">ComVtuber</a>
 
-                {{-- Recherche desktop --}}
-                <form action="{{ route('home') }}" method="GET" class="hidden md:flex flex-1 max-w-xs">
+                {{-- 2. Recherche (Visible sur Mobile ET Desktop) --}}
+                {{-- On enlève le "hidden md:flex" pour qu'elle soit toujours là --}}
+                <form action="{{ route('home') }}" method="GET" class="flex flex-1 max-w-xs mx-2 md:mx-0">
                     <input type="search" name="q" placeholder="Rechercher un sujet..."
                            value="{{ request('q') }}"
                            class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                 </form>
 
-                {{-- Navigation desktop --}}
-                <nav class=" lg:flex items-center gap-1">
+                {{-- 3. Navigation Desktop (Cachée sur mobile grâce à "hidden") --}}
+                <nav class="hidden lg:flex items-center gap-1">
                     <a href="{{ route('home') }}" class="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium">Accueil</a>
                     <a href="#" class="px-3 py-2 rounded-lg text-blue-600 hover:bg-blue-50 text-sm font-medium">Articles</a>
                     <a href="#" class="px-3 py-2 rounded-lg text-blue-600 hover:bg-blue-50 text-sm font-medium">Vtubers</a>
+                    
                 </nav>
-
-                {{-- User desktop --}}
+                {{-- 4. User Desktop --}}
                 @auth
                     <div class="hidden lg:block relative">
+                        @auth
+    <a href="{{ route('articles.create') }}"
+       class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium">
+        + Nouvel article
+    </a>
+@endauth
                         <button @click="userMenu = !userMenu"
                                 class="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 text-sm">
                             {{ Auth::user()->name }}
@@ -63,8 +70,8 @@
                     <a href="{{ route('login') }}" class="hidden lg:inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">Connexion</a>
                 @endauth
 
-                {{-- Hamburger mobile --}}
-                <button @click="mobileMenu = !mobileMenu" class="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                {{-- 5. Hamburger mobile --}}
+                <button @click="mobileMenu = !mobileMenu" class="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg shrink-0">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path x-show="!mobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                         <path x-show="mobileMenu" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -72,16 +79,14 @@
                 </button>
             </div>
 
-            {{-- Menu mobile --}}
+            {{-- 6. Menu mobile (Collapse) --}}
             <div x-show="mobileMenu" x-cloak x-collapse class="lg:hidden pb-4 space-y-2 border-t border-gray-100 pt-2">
-                <form action="{{ route('home') }}" method="GET" class="my-2">
-                    <input type="search" name="q" placeholder="Rechercher un sujet..."
-                           value="{{ request('q') }}"
-                           class="w-full px-4 py-2 text-sm border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
-                </form>
+                {{-- ⚠️ J'ai supprimé la barre de recherche ici comme demandé --}}
+                
                 <a href="{{ route('home') }}" class="block px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium">Accueil</a>
                 <a href="#" class="block px-3 py-2 rounded-lg text-blue-600 hover:bg-blue-50 text-sm font-medium">Articles</a>
                 <a href="#" class="block px-3 py-2 rounded-lg text-blue-600 hover:bg-blue-50 text-sm font-medium">Vtubers</a>
+                
                 @auth
                     <hr class="border-gray-100">
                     <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 text-sm">Tableau de bord</a>
@@ -91,6 +96,7 @@
                         <button type="submit" class="block w-full text-left px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 text-sm">Déconnexion</button>
                     </form>
                 @else
+                    <hr class="border-gray-100">
                     <a href="{{ route('login') }}" class="block px-3 py-2 bg-blue-600 text-white rounded-lg text-center text-sm font-medium">Connexion</a>
                 @endauth
             </div>
