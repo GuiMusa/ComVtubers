@@ -2,40 +2,54 @@
 
 namespace App\Providers;
 
-use App\View\Composers\SidebarComposer; 
+use App\Models\Article;
+use App\Policies\ArticlePolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    public const HOME = '/';   // → mettre '/'
-    
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        // Utiliser un View Composer pour partager les données avec la barre latérale.
-        // Ceci est exécuté chaque fois que la vue 'layouts.Lsidebar' est rendue.
-        // View::composer(
-        //     'layouts.Lsidebar',
-        //     SidebarComposer::class
-        // );
+        /*
+        |------------------------------------------------------------------
+        | View Composer pour Lsidebar
+        |------------------------------------------------------------------
+        | Fournit automatiquement $userArticles et $latestArticles
+        | à TOUTES les vues qui incluent layouts.Lsidebar (show, edit,
+        | create, index…). Plus besoin de les passer depuis le contrôleur.
+        */
         View::composer('layouts.Lsidebar', function ($view) {
-    $view->with([
-        'userArticles'    => auth()->check()
-            ? \App\Models\Article::where('user_id', auth()->id())->latest('date')->take(10)->get()
-            : collect(),
-        'latestArticles'  => \App\Models\Article::visible()->latest('date')->take(5)->get(),
-    ]);
-});
+            $userArticles = auth()->check()
+                ? Article::query()
+                    ->where('user_id', auth()->id())
+                    ->orderByDesc('date')
+                    ->take(10)
+                    ->get()
+                : collect();
+
+            $latestArticles = Article::visible()
+                ->orderByDesc('date')
+                ->take(5)
+                ->get();
+
+            $view->with([
+                'userArticles'   => $userArticles,
+                'latestArticles' => $latestArticles,
+            ]);
+        });
+
+        /*
+        |------------------------------------------------------------------
+        | Enregistrement explicite de la Policy
+        | (Laravel 11 auto-découvre, mais explicite = compatible 10/11/12)
+        */
+        Gate::policy(Article::class, ArticlePolicy::class);
     }
 }

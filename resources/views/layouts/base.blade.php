@@ -41,29 +41,38 @@
                 </nav>
                 {{-- 4. User Desktop --}}
                 @auth
-                    <div class="hidden lg:block relative">
-                        @auth
-    <a href="{{ route('articles.create') }}"
-       class="px-3 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium">
-        + Nouvel article
-    </a>
-@endauth
-                        <button @click="userMenu = !userMenu"
-                                class="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 text-sm">
-                            {{ Auth::user()->name }}
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                            </svg>
-                        </button>
-                        <div x-show="userMenu" x-cloak @click.outside="userMenu = false"
-                             class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border border-gray-100">
-                            <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tableau de bord</a>
-                            <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mon Profil</a>
-                            <hr class="my-1 border-gray-100">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Déconnexion</button>
-                            </form>
+                    <div class="hidden lg:flex items-center gap-3">
+                        {{-- Bouton Nouvel Article --}}
+                        @can('create', \App\Models\Article::class)
+                            <a href="{{ route('articles.create') }}"
+                               class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors shadow-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/>
+                                </svg>
+                                Nouvel article
+                            </a>
+                        @endcan
+
+                        {{-- Menu Utilisateur --}}
+                        <div class="relative">
+                            <button @click="userMenu = !userMenu"
+                                    class="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 text-sm transition-colors">
+                                {{ Auth::user()->name }}
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+                            
+                            <div x-show="userMenu" x-cloak @click.outside="userMenu = false"
+                                 class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 border border-gray-100 z-50">
+                                <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Tableau de bord</a>
+                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mon Profil</a>
+                                <hr class="my-1 border-gray-100">
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Déconnexion</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 @else

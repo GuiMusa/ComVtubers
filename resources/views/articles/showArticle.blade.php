@@ -16,7 +16,7 @@
 
     <article class="bg-white p-6 rounded-xl shadow-sm mb-6">
         @auth
-            @if(auth()->id() === $article->user_id)
+            @can('update', $article)
                 <div class="flex justify-end gap-2 mb-4">
                     <a href="{{ route('articles.edit', $article) }}"
                        class="px-3 py-1.5 text-sm border border-amber-500 text-amber-600 rounded-lg hover:bg-amber-50">
@@ -30,7 +30,7 @@
                         </button>
                     </form>
                 </div>
-            @endif
+            @endcan
         @endauth
         {{-- … etc --}}
     </article>
