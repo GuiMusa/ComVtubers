@@ -11,7 +11,9 @@
     {{-- <style>
         [x-cloak] { display: none !important; }
     </style> --}}
+    @stack('styles')
 </head>
+@stack('scripts')
 <body class="bg-gray-50 min-h-screen flex flex-col">
 
         {{-- ============================================ --}}
