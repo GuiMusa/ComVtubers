@@ -79,15 +79,30 @@
                     <a href="{{ route('login') }}" class="hidden lg:inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">Connexion</a>
                 @endauth
 
-                {{-- 5. Hamburger mobile --}}
-                <button @click="mobileMenu = !mobileMenu" class="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg shrink-0">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path x-show="!mobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        <path x-show="mobileMenu" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
+                {{-- 5. Actions Mobile & Tablette (Hamburger + Bouton Tablette) --}}
+                <div class="flex items-center gap-2 lg:hidden">
+                    {{-- Bouton Nouvel Article (Affiché uniquement sur Tablette : md à lg) --}}
+                    @auth
+                        @can('create', \App\Models\Article::class)
+                            <a href="{{ route('articles.create') }}"
+                               class="hidden md:inline-flex items-center gap-1.5 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium transition-colors shadow-sm">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M5 12h14"/>
+                                </svg>
+                                Nouvel article
+                            </a>
+                        @endcan
+                    @endauth
 
+                    {{-- Hamburger mobile (Visible sur Mobile et Tablette, caché sur Desktop) --}}
+                    <button @click="mobileMenu = !mobileMenu" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg shrink-0">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!mobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <path x-show="mobileMenu" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
             {{-- 6. Menu mobile (Collapse) --}}
             <div x-show="mobileMenu" x-cloak x-collapse class="lg:hidden pb-4 space-y-2 border-t border-gray-100 pt-2">
                 {{-- ⚠️ J'ai supprimé la barre de recherche ici comme demandé --}}

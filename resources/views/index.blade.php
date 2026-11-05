@@ -18,7 +18,7 @@
             <h1 class="text-2xl font-bold">Les articles récents</h1>
             @auth
                 <a href="{{ route('articles.create') }}"
-                   class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium text-center">
+                   class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium text-center md:hidden">
                     Créer un article
                 </a>
             @endauth
