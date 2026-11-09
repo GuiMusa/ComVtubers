@@ -25,7 +25,8 @@ class AppServiceProvider extends ServiceProvider
         | à TOUTES les vues qui incluent layouts.Lsidebar (show, edit,
         | create, index…). Plus besoin de les passer depuis le contrôleur.
         */
-        View::composer('layouts.Lsidebar', function ($view) {
+View::composer('layouts.Lsidebar', function ($view) {
+            // 1. Mes articles
             $userArticles = auth()->check()
                 ? Article::query()
                     ->where('user_id', auth()->id())
@@ -34,10 +35,20 @@ class AppServiceProvider extends ServiceProvider
                     ->get()
                 : collect();
 
-            $latestArticles = Article::visible()
-                ->orderByDesc('date')
-                ->take(5)
-                ->get();
+            // 2. Derniers vus (Récupération depuis la session)
+            $viewedIds = session()->get('viewed_articles', []);
+            $latestArticles = collect();
+
+            if (!empty($viewedIds)) {
+                // On récupère les articles par leur ID et on s'assure qu'ils sont toujours visibles
+                $latestArticles = Article::whereIn('id', $viewedIds)
+                    ->visible() 
+                    ->get()
+                    // On trie les résultats pour respecter l'ordre exact de la session (du plus récent au plus ancien)
+                    ->sortBy(function ($article) use ($viewedIds) {
+                        return array_search($article->id, $viewedIds);
+                    });
+            }
 
             $view->with([
                 'userArticles'   => $userArticles,
