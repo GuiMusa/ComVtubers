@@ -13,7 +13,7 @@ class UserController extends Controller
     {
         // Récupérer les 10 derniers articles avec pagination
         $articles = Article::with('user', 'categorie') // Pré-chargement des relations
-                           ->where('statue', 'publié') // Filtrer par statut 'publié' pour la vue publique
+                           ->where('status', 'publié') // Filtrer par statut 'publié' pour la vue publique
                            ->orderBy('date', 'desc')
                            ->paginate(10);
         

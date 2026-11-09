@@ -13,7 +13,7 @@ return new class extends Migration
             $table->dateTime('date');
             $table->string('titre');
             $table->string('image')->nullable();
-            $table->enum('statue', ['brouillon', 'publié', 'archivé'])->default('brouillon');
+            $table->enum('status', ['brouillon', 'publié', 'archivé'])->default('brouillon');
             $table->boolean('favoris')->default(false);
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('liste_id')->constrained('listes')->onDelete('cascade');

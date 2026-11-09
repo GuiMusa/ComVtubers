@@ -22,7 +22,7 @@ class User extends Authenticatable
         'photo_de_profil',
         'email',
         'password',
-        'statue',
+        'status',
     ];
 
     /**
@@ -53,7 +53,7 @@ class User extends Authenticatable
      */
     public function scopeActive($query)
     {
-        return $query->where('statue', 'actif')->orWhere('statue', 'modérateur');
+        return $query->where('status', 'actif')->orwhere('status', 'modérateur');
     }
 
     /**

@@ -13,7 +13,7 @@ class ArticleResource extends JsonResource
             'id'        => $this->id,
             'titre'     => $this->titre,
             'contenu'   => $this->contenu,
-            'statue'    => $this->statue,
+            'status'    => $this->status,
             'date'      => $this->date,
 
             // URL complète prête à consommer (image ou vidéo)

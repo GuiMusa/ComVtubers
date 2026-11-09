@@ -15,8 +15,8 @@ class ArticlePolicy
      */
     public function view(?User $user, Article $article): Response
     {
-        $isPublic = $article->statue === 'publié'
-            && (!$article->user || $article->user->statue !== 'banni');
+        $isPublic = $article->status === 'publié'
+            && (!$article->user || $article->user->status !== 'banni');
 
         if ($isPublic) {
             return Response::allow();
@@ -32,7 +32,7 @@ class ArticlePolicy
      */
     public function create(User $user): bool
     {
-        return $user->statue !== 'banni';
+        return $user->status !== 'banni';
     }
 
     /**

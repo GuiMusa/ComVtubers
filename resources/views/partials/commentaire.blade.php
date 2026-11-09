@@ -3,75 +3,70 @@
     Il s'occupe d'afficher UN commentaire et s'appelle lui-même pour afficher ses réponses.
 --}}
 
-<div class="list-group-item border-0 mb-2 rounded-3 shadow-sm p-3 {{ $commentaire->parent_id ? 'bg-light ms-4' : 'bg-white' }}">
-    <div class="d-flex justify-content-between mb-2">
-        <div class="fw-bold {{ $commentaire->parent_id ? 'text-secondary small' : 'text-primary' }}">
+<div class="mb-3 p-4 rounded-xl border {{ $commentaire->parent_id ? 'bg-gray-50 border-gray-200 ml-4 lg:ml-8' : 'bg-white border-gray-100 shadow-sm' }}">
+    <div class="flex flex-col sm:flex-row justify-between mb-2 gap-1">
+        <div class="font-bold {{ $commentaire->parent_id ? 'text-gray-600 text-sm' : 'text-blue-600' }}">
             {{ $commentaire->user ? $commentaire->user->name : 'Utilisateur anonyme' }}
             
             {{-- Petit texte pour indiquer à qui on répond dans les fils imbriqués --}}
             @if($commentaire->parent)
-                <span class="text-muted fw-normal" style="font-size: 0.8rem;">
+                <span class="text-gray-400 font-normal text-xs ml-1">
                     répond à {{ $commentaire->parent->user ? $commentaire->parent->user->name : 'un utilisateur' }}
                 </span>
             @endif
         </div>
         
-        <div class="d-flex align-items-center gap-2">
+        <div class="flex items-center gap-2 text-xs text-gray-400">
             {{-- Mention "(Modifié)" si la date de mise à jour est différente de la date de création --}}
             @if($commentaire->created_at != $commentaire->updated_at)
-                <small class="text-muted" style="font-size: 0.7rem;">(Modifié)</small>
+                <span>(Modifié)</span>
             @endif
-            <small class="text-muted" style="font-size: {{ $commentaire->parent_id ? '0.75rem' : '0.85rem' }};">
-                {{ \Carbon\Carbon::parse($commentaire->date)->format('d/m/Y H:i') }}
-            </small>
+            <span>{{ \Carbon\Carbon::parse($commentaire->date)->format('d/m/Y H:i') }}</span>
         </div>
     </div>
     
     {{-- Affichage du contenu textuel. Il est masqué par JS si on passe en mode édition --}}
     <div id="comment-content-{{ $commentaire->id }}">
-        <p class="mb-2 {{ $commentaire->parent_id ? 'small' : '' }}">{{ $commentaire->contenu }}</p>
+        <p class="text-gray-700 break-words whitespace-pre-wrap {{ $commentaire->parent_id ? 'text-sm' : '' }}">{{ $commentaire->contenu }}</p>
     </div>
-
+    
     @auth
-        {{-- Formulaire d'édition : Masqué par défaut (classe d-none de Bootstrap) --}}
+        {{-- Formulaire d'édition : Masqué par défaut (classe hidden de Tailwind) --}}
         @if(Auth::id() === $commentaire->user_id)
-            <div id="edit-form-{{ $commentaire->id }}" class="mt-2 mb-2 d-none">
+            <div id="edit-form-{{ $commentaire->id }}" class="mt-3 hidden">
                 <form action="{{ route('commentaires.update', $commentaire->id) }}" method="POST">
                     @csrf
-                    @method('PATCH') {{-- Utilisation de PATCH pour la mise à jour partielle --}}
+                    @method('PATCH')
                     <div class="mb-2">
-                        <textarea name="contenu" class="form-control form-control-sm" rows="2" style="resize: none;" required>{{ $commentaire->contenu }}</textarea>
+                        <textarea name="contenu" class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none" rows="2" required>{{ $commentaire->contenu }}</textarea>
                     </div>
-                    <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-success btn-sm" style="font-size: 0.75rem;">Enregistrer</button>
-                        <button type="button" class="btn btn-light btn-sm border" onclick="toggleEditForm({{ $commentaire->id }})" style="font-size: 0.75rem;">Annuler</button>
+                    <div class="flex gap-2">
+                        <button type="submit" class="px-3 py-1.5 bg-green-600 text-white rounded-lg text-xs font-bold hover:bg-green-700 transition-colors">Enregistrer</button>
+                        <button type="button" class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-300 transition-colors" onclick="toggleEditForm({{ $commentaire->id }})">Annuler</button>
                     </div>
                 </form>
             </div>
         @endif
 
         {{-- Barre d'actions (Répondre, Modifier, Supprimer) --}}
-        <div class="d-flex gap-3 mb-1">
-            <button class="btn btn-link btn-sm p-0 text-decoration-none text-muted fw-bold" 
+        <div class="flex gap-4 mt-2">
+            <button class="text-xs font-bold text-gray-500 hover:text-blue-600 transition-colors" 
                     type="button" 
-                    onclick="toggleReplyForm({{ $commentaire->id }})"
-                    style="font-size: 0.8rem;">
+                    onclick="toggleReplyForm({{ $commentaire->id }})">
                 Répondre
             </button>
 
             @if(Auth::id() === $commentaire->user_id)
-                <button class="btn btn-link btn-sm p-0 text-decoration-none text-warning fw-bold" 
+                <button class="text-xs font-bold text-amber-500 hover:text-amber-600 transition-colors" 
                         type="button" 
-                        onclick="toggleEditForm({{ $commentaire->id }})"
-                        style="font-size: 0.8rem;">
+                        onclick="toggleEditForm({{ $commentaire->id }})">
                     Modifier
                 </button>
 
-                {{-- Formulaire de suppression : utilisation de confirm() en JS pour la sécurité --}}
-                <form action="{{ route('commentaires.destroy', $commentaire->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ? Cela supprimera également toutes les réponses associées.')">
+                <form action="{{ route('commentaires.destroy', $commentaire->id) }}" method="POST" class="inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ? Cela supprimera également toutes les réponses associées.')">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-link btn-sm p-0 text-decoration-none text-danger fw-bold" style="font-size: 0.8rem;">
+                    <button type="submit" class="text-xs font-bold text-red-500 hover:text-red-600 transition-colors">
                         Supprimer
                     </button>
                 </form>
@@ -79,28 +74,24 @@
         </div>
 
         {{-- Formulaire de réponse : Masqué par défaut --}}
-        <div id="reply-form-{{ $commentaire->id }}" class="mt-2 mb-2 d-none">
+        <div id="reply-form-{{ $commentaire->id }}" class="mt-3 hidden">
             <form action="{{ route('commentaires.store', $article->id) }}" method="POST">
                 @csrf
-                {{-- Champ caché indispensable pour lier la réponse au commentaire parent --}}
                 <input type="hidden" name="parent_id" value="{{ $commentaire->id }}">
                 <div class="mb-2">
-                    <textarea name="contenu" class="form-control form-control-sm" rows="2" placeholder="Votre réponse..." style="resize: none;" required></textarea>
+                    <textarea name="contenu" class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none" rows="2" placeholder="Votre réponse..." required></textarea>
                 </div>
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary btn-sm" style="font-size: 0.75rem;">Envoyer</button>
-                    <button type="button" class="btn btn-light btn-sm border" onclick="toggleReplyForm({{ $commentaire->id }})" style="font-size: 0.75rem;">Annuler</button>
+                <div class="flex gap-2">
+                    <button type="submit" class="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-colors">Envoyer</button>
+                    <button type="button" class="px-3 py-1.5 bg-gray-200 text-gray-700 rounded-lg text-xs font-bold hover:bg-gray-300 transition-colors" onclick="toggleReplyForm({{ $commentaire->id }})">Annuler</button>
                 </div>
             </form>
         </div>
     @endauth
 
-    {{-- 
-        C'EST ICI QUE LA MAGIE OPÈRE :
-        Si le commentaire a des réponses, on ré-inclut ce même fichier pour chaque réponse.
-    --}}
+    {{-- Réponses imbriquées --}}
     @if($commentaire->reponses->count() > 0)
-        <div class="mt-2 border-start ps-1">
+        <div class="mt-3 border-l-2 border-gray-200 pl-2">
             @foreach($commentaire->reponses as $reponse)
                 @include('partials.commentaire', ['commentaire' => $reponse, 'article' => $article])
             @endforeach

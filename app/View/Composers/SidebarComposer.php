@@ -29,7 +29,7 @@ class SidebarComposer
             // Mes articles
             $userArticles = Article::with('user', 'categorie')
                                    ->where('user_id', $userId)
-                                   ->where('statue', 'publié')
+                                   ->where('status', 'publié')
                                    ->orderBy('date', 'desc')
                                    ->take(5)
                                    ->get();
@@ -38,7 +38,7 @@ class SidebarComposer
             $favoriteArticles = Article::with('user', 'categorie')
                                        ->where('user_id', $userId)
                                        ->where('favoris', true)
-                                       ->where('statue', 'publié')
+                                       ->where('status', 'publié')
                                        ->orderBy('date', 'desc')
                                        ->take(5)
                                        ->get();

@@ -16,7 +16,7 @@ class testSeeder extends Seeder
         // On crée 10 utilisateurs aléatoires via la Factory.
         // On définit aléatoirement leur statut : principalement 'actif', avec quelques 'banni' pour tester les filtres.
         $users = \App\Models\User::factory(10)->create([
-            'statue' => fn() => fake()->randomElement(['actif', 'actif', 'actif', 'banni']) 
+            'status' => fn() => fake()->randomElement(['actif', 'actif', 'actif', 'banni']) 
         ]);
 
         // 2. CRÉATION DES DÉPENDANCES (Cartes et Listes)
@@ -47,7 +47,7 @@ class testSeeder extends Seeder
             'user_id' => fn() => $users->random()->id,
             'liste_id' => fn() => $listes->random()->id,
             'categorie_id' => fn() => $categories->random()->id,
-            'statue' => fn() => fake()->randomElement(['publié', 'publié', 'publié', 'brouillon']), // Certains articles restent en brouillon
+            'status' => fn() => fake()->randomElement(['publié', 'publié', 'publié', 'brouillon']), // Certains articles restent en brouillon
             'favoris' => false, // Jamais en favoris par défaut
         ]);
 

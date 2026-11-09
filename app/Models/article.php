@@ -22,7 +22,7 @@ class Article extends Model
         'titre',
         'contenu',
         'media',
-        'statue',
+        'status',
         'favoris',
         'user_id',
         'liste_id',
@@ -44,9 +44,9 @@ class Article extends Model
      */
     public function scopeVisible($query)
     {
-        return $query->where('statue', 'publié')
+        return $query->where('status', 'publié')
                      ->whereHas('user', function ($q) {
-                         $q->whereIn('statue', ['actif', 'modérateur']);
+                         $q->whereIn('status', ['actif', 'modérateur']);
                      });
     }
 

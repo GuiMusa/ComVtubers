@@ -87,7 +87,7 @@ class ArticleController extends Controller
             'contenu'      => $data['contenu'],
             'media'        => $mediaPath,
             'date'         => now(),
-            'statue'       => 'publié',
+            'status'       => 'publié',
             'user_id'      => auth()->id(),
             'categorie_id' => $data['categorie_id'],
         ]);
